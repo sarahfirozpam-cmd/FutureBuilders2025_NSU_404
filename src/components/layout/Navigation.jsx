@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import {
   BottomNavigation,
   BottomNavigationAction,
-  Paper
+  Box
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
@@ -30,24 +30,26 @@ const Navigation = () => {
   ];
 
   return (
-    <Paper 
-      sx={{ 
-        position: 'fixed', 
-        bottom: 0, 
-        left: 0, 
+    <Box
+      sx={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
         right: 0,
         zIndex: 1000,
         overflowX: 'auto',
         overflowY: 'hidden',
+        bgcolor: 'background.paper',
+        boxShadow: 3,
+        WebkitOverflowScrolling: 'touch',
         '&::-webkit-scrollbar': {
-          height: '3px'
+          height: '4px'
         },
         '&::-webkit-scrollbar-thumb': {
-          backgroundColor: 'rgba(0,0,0,.2)',
-          borderRadius: '3px'
+          backgroundColor: 'rgba(0,0,0,.3)',
+          borderRadius: '4px'
         }
-      }} 
-      elevation={3}
+      }}
     >
       <BottomNavigation
         value={location.pathname}
@@ -56,23 +58,26 @@ const Navigation = () => {
         }}
         showLabels
         sx={{
-          width: 'auto',
+          minWidth: 'fit-content',
+          width: 'max-content',
           display: 'flex',
           flexWrap: 'nowrap',
           '& .MuiBottomNavigationAction-root': {
-            minWidth: '60px',
-            maxWidth: '85px',
-            padding: '6px 2px',
+            minWidth: '70px',
+            maxWidth: '80px',
+            padding: '6px 4px',
             flex: '0 0 auto',
             '& .MuiBottomNavigationAction-label': {
-              fontSize: '0.55rem',
+              fontSize: '0.6rem',
               whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
               '&.Mui-selected': {
-                fontSize: '0.6rem'
+                fontSize: '0.65rem'
               }
             },
             '& .MuiSvgIcon-root': {
-              fontSize: '1.1rem'
+              fontSize: '1.3rem'
             }
           }
         }}
@@ -86,7 +91,7 @@ const Navigation = () => {
           />
         ))}
       </BottomNavigation>
-    </Paper>
+    </Box>
   );
 };
 
