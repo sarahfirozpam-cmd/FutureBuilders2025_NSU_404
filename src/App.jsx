@@ -1,8 +1,7 @@
 import React, { useEffect, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Box } from '@mui/material';
 
 // Layout
 import Layout from './components/layout/Layout';
@@ -78,6 +77,21 @@ const theme = createTheme({
   }
 });
 
+// ScrollToTop component - resets scroll on route change
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant'
+    });
+  }, [pathname]);
+
+  return null;
+}
+
 function App() {
   const isOnline = useOnlineStatus();
   const { setModelsLoaded } = useAppStore();
@@ -90,12 +104,16 @@ function App() {
     const loadModels = async () => {
       try {
         const { modelLoader } = await import('./ai/modelLoader');
+        const { skinAnalyzer } = await import('./ai/skinAnalyzer');
+        
         await Promise.all([
           modelLoader.loadSymptomCheckerModel(),
-          modelLoader.loadVitalsPredictor()
+          modelLoader.loadVitalsPredictor(),
+          skinAnalyzer.loadModel()
         ]);
+        
         setModelsLoaded(true);
-        console.log('AI models loaded successfully');
+        console.log('All AI models loaded successfully');
       } catch (error) {
         console.error('Error loading AI models:', error);
       }
@@ -108,15 +126,16 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
+        <ScrollToTop />
         <Suspense fallback={<LoadingScreen />}>
           <Layout>
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/symptom-checker" element={<SymptomChecker />} />
               <Route path="/vitals" element={<VitalsMonitor />} />
+              <Route path="/visual-scanner" element={<VisualScanner />} />
               <Route path="/education" element={<HealthEducation />} />
               <Route path="/telemedicine" element={<Telemedicine />} />
-              <Route path="/visual-scanner" element={<VisualScanner />} />
             </Routes>
           </Layout>
         </Suspense>
