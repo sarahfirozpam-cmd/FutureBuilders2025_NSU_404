@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import {
   Box, Typography, Grid, Card, CardContent, CardMedia,
   CardActions, Button, Chip, TextField, InputAdornment,
-  Stack, CircularProgress, Dialog, AppBar, Toolbar, IconButton, 
-  Slide, Container, Divider
+  Stack, CircularProgress, Dialog, AppBar, Toolbar, IconButton,
+  Slide, Container, Divider, useTheme
 } from '@mui/material';
 import {
   Search as SearchIcon, Download as DownloadIcon,
@@ -21,8 +21,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const HealthEducation = () => {
   const { t } = useTranslation();
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
   const { language = 'en', downloadedContent = [], addDownloadedContent } = useAppStore();
-  
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [content, setContent] = useState([]);
@@ -49,9 +51,9 @@ const HealthEducation = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const contentLoader = (await import('../services/contentLoader')).default;
-      
+
       // Load and Merge
       const en = await contentLoader.loadArticles('en');
       const bn = await contentLoader.loadArticles('bn');
@@ -74,7 +76,7 @@ const HealthEducation = () => {
     const filtered = allContent.filter(item => {
       const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
       const matchesSearch = item.title[language]?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            item.description[language]?.toLowerCase().includes(searchQuery.toLowerCase());
+        item.description[language]?.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     });
     setContent(filtered);
@@ -94,8 +96,8 @@ const HealthEducation = () => {
 
   if (loading) return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 10 }}>
-      <CircularProgress sx={{ mb: 2, color: '#354024' }} />
-      <Typography sx={{ color: '#4C3D19', fontWeight: 600 }}>Loading Medical Resources...</Typography>
+      <CircularProgress sx={{ mb: 2, color: isDark ? '#889063' : '#354024' }} />
+      <Typography sx={{ color: isDark ? '#CFBB99' : '#4C3D19', fontWeight: 600 }}>Loading Medical Resources...</Typography>
     </Box>
   );
 
@@ -108,15 +110,42 @@ const HealthEducation = () => {
 
   return (
     <Box>
-      <Typography variant="h4" fontWeight="bold" sx={{ mb: 3 }}>Health Education</Typography>
+      <Typography variant="h4" fontWeight="bold" sx={{ mb: 3, color: isDark ? '#E5D7C4' : 'inherit' }}>Health Education</Typography>
 
       <TextField
         fullWidth
         placeholder="Search for symptoms or diseases..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        sx={{ mb: 3, bgcolor: 'white' }}
-        InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment> }}
+        sx={{
+          mb: 3,
+          '& .MuiOutlinedInput-root': {
+            bgcolor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'white',
+            '& fieldset': {
+              borderColor: isDark ? 'rgba(136, 144, 99, 0.3)' : 'rgba(0, 0, 0, 0.23)'
+            },
+            '&:hover fieldset': {
+              borderColor: isDark ? 'rgba(136, 144, 99, 0.5)' : 'rgba(0, 0, 0, 0.87)'
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: isDark ? '#889063' : '#354024'
+            }
+          },
+          '& .MuiInputBase-input': {
+            color: isDark ? '#E5D7C4' : '#4C3D19'
+          },
+          '& .MuiInputBase-input::placeholder': {
+            color: isDark ? 'rgba(229, 215, 196, 0.6)' : 'rgba(76, 61, 25, 0.6)',
+            opacity: 1
+          }
+        }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon sx={{ color: isDark ? '#CFBB99' : '#4C3D19' }} />
+            </InputAdornment>
+          )
+        }}
       />
 
       <Stack direction="row" spacing={1} sx={{ mb: 4, overflowX: 'auto', pb: 1 }}>
@@ -133,12 +162,12 @@ const HealthEducation = () => {
       <Grid container spacing={3}>
         {content.map((item) => (
           <Grid item xs={12} sm={6} md={4} key={item.id}>
-            <Card 
+            <Card
               onClick={() => setSelectedArticle(item)}
-              sx={{ 
-                height: '100%', 
-                display: 'flex', 
-                flexDirection: 'column', 
+              sx={{
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
                 cursor: 'pointer',
                 transition: '0.3s',
                 '&:hover': { transform: 'translateY(-5px)', boxShadow: 6 }
@@ -158,8 +187,8 @@ const HealthEducation = () => {
                 <Chip label={item.category} size="small" variant="outlined" />
               </CardContent>
               <CardActions sx={{ p: 2, pt: 0 }}>
-                <Button 
-                  fullWidth 
+                <Button
+                  fullWidth
                   variant={downloadedContent.some(d => d.id === item.id) ? "outlined" : "contained"}
                   color={downloadedContent.some(d => d.id === item.id) ? "success" : "primary"}
                   startIcon={downloadedContent.some(d => d.id === item.id) ? <CheckIcon /> : <DownloadIcon />}
@@ -174,10 +203,10 @@ const HealthEducation = () => {
       </Grid>
 
       {/* --- ARTICLE READER DIALOG --- */}
-      <Dialog 
-        fullScreen 
-        open={Boolean(selectedArticle)} 
-        onClose={() => setSelectedArticle(null)} 
+      <Dialog
+        fullScreen
+        open={Boolean(selectedArticle)}
+        onClose={() => setSelectedArticle(null)}
         TransitionComponent={Transition}
       >
         <AppBar sx={{ position: 'relative', bgcolor: 'primary.main' }}>
@@ -190,12 +219,12 @@ const HealthEducation = () => {
             </Typography>
           </Toolbar>
         </AppBar>
-        
+
         <Container maxWidth="md" sx={{ py: 6 }}>
           <Typography variant="h3" component="h1" gutterBottom fontWeight="bold">
             {selectedArticle?.title[language]}
           </Typography>
-          
+
           <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
             <Chip icon={<ReadIcon />} label={selectedArticle?.category} color="primary" variant="outlined" />
             <Typography variant="caption" color="text.secondary">
@@ -206,14 +235,14 @@ const HealthEducation = () => {
           <Divider sx={{ mb: 4 }} />
 
           {/* Renders the actual HTML content from your JSON */}
-          <Box 
-            sx={{ 
+          <Box
+            sx={{
               '& p': { lineHeight: 1.7, mb: 2, fontSize: '1.1rem' },
               '& h2': { mt: 4, mb: 2, color: 'primary.dark' },
               '& ul': { mb: 3 },
               '& li': { mb: 1 }
             }}
-            dangerouslySetInnerHTML={{ __html: selectedArticle?.content[language] || '' }} 
+            dangerouslySetInnerHTML={{ __html: selectedArticle?.content[language] || '' }}
           />
         </Container>
       </Dialog>

@@ -12,7 +12,8 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemAvatar
+  ListItemAvatar,
+  useTheme
 } from '@mui/material';
 import {
   Assignment as SymptomIcon,
@@ -31,6 +32,8 @@ import { useAppStore } from '../store/useAppStore';
 const Dashboard = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
   const { symptomsHistory, vitalsHistory, modelsLoaded } = useAppStore();
   const [recentSymptoms, setRecentSymptoms] = useState([]);
   const [recentVitals, setRecentVitals] = useState([]);
@@ -105,21 +108,23 @@ const Dashboard = () => {
   return (
     <Box>
       {/* Welcome Section */}
-      <Box 
-        sx={{ 
+      <Box
+        sx={{
           mb: 4,
           p: { xs: 3, sm: 4 },
-          background: 'rgba(53, 64, 36, 0.06)',
+          background: isDark ? 'rgba(136, 144, 99, 0.08)' : 'rgba(53, 64, 36, 0.06)',
           borderRadius: 3
         }}
       >
-        <Typography 
-          variant="h4" 
+        <Typography
+          variant="h4"
           gutterBottom
           sx={{
             fontSize: { xs: '1.75rem', sm: '2.125rem' },
             fontWeight: 700,
-            background: 'linear-gradient(135deg, #354024 0%, #4C3D19 100%)',
+            background: isDark
+              ? 'linear-gradient(135deg, #889063 0%, #CFBB99 100%)'
+              : 'linear-gradient(135deg, #354024 0%, #4C3D19 100%)',
             backgroundClip: 'text',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
@@ -137,7 +142,7 @@ const Dashboard = () => {
             label="AI Models Ready"
             color="success"
             size="medium"
-            sx={{ 
+            sx={{
               fontWeight: 600,
               px: 1,
               background: 'linear-gradient(135deg, #354024 0%, #4C3D19 100%)',
@@ -148,13 +153,13 @@ const Dashboard = () => {
       </Box>
 
       {/* Quick Actions */}
-      <Typography 
-        variant="h5" 
-        gutterBottom 
-        sx={{ 
+      <Typography
+        variant="h5"
+        gutterBottom
+        sx={{
           mb: 3,
           fontWeight: 700,
-          color: '#4C3D19'
+          color: isDark ? '#CFBB99' : '#4C3D19'
         }}
       >
         {t('dashboard.quickActions')}
@@ -162,8 +167,8 @@ const Dashboard = () => {
       <Grid container spacing={2} sx={{ mb: 4 }}>
         {quickActions.map((action, index) => (
           <Grid item xs={6} sm={6} md={3} key={index}>
-            <Card 
-              sx={{ 
+            <Card
+              sx={{
                 height: '100%',
                 cursor: 'pointer',
                 background: action.gradient,
@@ -194,10 +199,10 @@ const Dashboard = () => {
                 >
                   {action.icon}
                 </Avatar>
-                <Typography 
-                  variant="h6" 
-                  gutterBottom 
-                  sx={{ 
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  sx={{
                     fontSize: { xs: '0.95rem', sm: '1.1rem' },
                     fontWeight: 700,
                     color: '#E5D7C4'
@@ -205,9 +210,9 @@ const Dashboard = () => {
                 >
                   {action.title}
                 </Typography>
-                <Typography 
-                  variant="body2" 
-                  sx={{ 
+                <Typography
+                  variant="body2"
+                  sx={{
                     fontSize: { xs: '0.75rem', sm: '0.875rem' },
                     display: { xs: 'none', sm: 'block' },
                     color: 'rgba(229, 215, 196, 0.8)'
@@ -222,19 +227,19 @@ const Dashboard = () => {
       </Grid>
 
       {/* Recent Activity */}
-      <Typography 
-        variant="h5" 
-        gutterBottom 
-        sx={{ 
+      <Typography
+        variant="h5"
+        gutterBottom
+        sx={{
           mb: 3,
           mt: 2,
           fontWeight: 700,
-          color: '#4C3D19'
+          color: isDark ? '#CFBB99' : '#4C3D19'
         }}
       >
         Recent Activity
       </Typography>
-      <Grid container spacing={3}>
+      <Grid container spacing={{ xs: 2, sm: 3 }}>
         {/* Recent Symptom Checks */}
         <Grid item xs={12} md={6}>
           <Card>
