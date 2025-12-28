@@ -4,7 +4,7 @@ Members: Fahim Muntasir Galib, Sami Sharif Arka, Sarah Firoz Pam
 
 Problem Statement: "The Silent Struggle: Why Medical Support in Bangladesh's Hill Tracks and Rural Regions Remains Hard to Find."
 
-Solution Overview: GramSheba AI, n offline-first AI based preliminary diagnosis and remote consultancy service.
+Solution Overview: GramSheba AI, an offline-first AI based preliminary diagnosis and remote consultancy service.
 
 # GramSheba AI: Offline Primary Healthcare MVP
 
