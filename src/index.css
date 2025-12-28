@@ -19,6 +19,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   background: #E5D7C4;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode body styles - applied via MUI CssBaseline */
+body.dark-mode {
+  background: #121212;
 }
 
 code {
@@ -32,7 +38,7 @@ code {
   position: relative;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - Light mode */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -53,6 +59,23 @@ code {
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #354024 0%, #4C3D19 100%);
   border-color: rgba(229, 215, 196, 0.8);
+}
+
+/* Custom scrollbar - Dark mode */
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-track {
+    background: rgba(30, 30, 30, 0.5);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #889063 0%, #4C3D19 100%);
+    border-color: rgba(136, 144, 99, 0.3);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #9aa574 0%, #5d4c20 100%);
+    border-color: rgba(136, 144, 99, 0.5);
+  }
 }
 
 /* Ensure smooth scrolling on all browsers */

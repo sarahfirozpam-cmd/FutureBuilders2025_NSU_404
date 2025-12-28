@@ -45,7 +45,12 @@ export const useAppStore = create(
       
       // AI models status
       modelsLoaded: false,
-      setModelsLoaded: (status) => set({ modelsLoaded: status })
+      setModelsLoaded: (status) => set({ modelsLoaded: status }),
+      
+      // Dark mode
+      darkMode: window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false,
+      toggleDarkMode: () => set((state) => ({ darkMode: !state.darkMode })),
+      setDarkMode: (mode) => set({ darkMode: mode })
     }),
     {
       name: 'rural-health-storage',
@@ -55,7 +60,8 @@ export const useAppStore = create(
         symptomsHistory: state.symptomsHistory,
         vitalsHistory: state.vitalsHistory,
         downloadedContent: state.downloadedContent,
-        queuedConsultations: state.queuedConsultations
+        queuedConsultations: state.queuedConsultations,
+        darkMode: state.darkMode
       })
     }
   )
