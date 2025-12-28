@@ -14,6 +14,7 @@ import SymptomChecker from './pages/SymptomChecker';
 import VitalsMonitor from './pages/VitalsMonitor';
 import HealthEducation from './pages/HealthEducation';
 import Telemedicine from './pages/Telemedicine';
+import VisualScanner from './pages/VisualScanner';
 
 // Services
 import { syncService } from './services/syncService';
@@ -115,6 +116,7 @@ function App() {
               <Route path="/vitals" element={<VitalsMonitor />} />
               <Route path="/education" element={<HealthEducation />} />
               <Route path="/telemedicine" element={<Telemedicine />} />
+              <Route path="/visual-scanner" element={<VisualScanner />} />
             </Routes>
           </Layout>
         </Suspense>

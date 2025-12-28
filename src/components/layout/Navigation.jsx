@@ -10,7 +10,8 @@ import {
   Assignment as SymptomIcon,
   FavoriteOutlined as VitalsIcon,
   School as EducationIcon,
-  Videocam as TelemedicineIcon
+  Videocam as TelemedicineIcon,
+  CameraAlt as ScannerIcon
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 
@@ -24,6 +25,7 @@ const Navigation = () => {
     { label: t('nav.symptomChecker'), value: '/symptom-checker', icon: <SymptomIcon /> },
     { label: t('nav.vitalsMonitor'), value: '/vitals', icon: <VitalsIcon /> },
     { label: t('nav.healthEducation'), value: '/education', icon: <EducationIcon /> },
+    { label: t('nav.visualScanner'), value: '/visual-scanner', icon: <ScannerIcon /> },
     { label: t('nav.telemedicine'), value: '/telemedicine', icon: <TelemedicineIcon /> }
   ];
 
