@@ -1,0 +1,12 @@
+{
+  "id": "dengue-fever-001",
+  "title": "Understanding Dengue Fever: Prevention and Treatment",
+  "category": "infectious",
+  "summary": "Learn about dengue symptoms, how it spreads, and essential prevention measures to protect your family.",
+  "content": "<h2>What is Dengue Fever?</h2><p>Dengue fever is a mosquito-borne viral infection that causes flu-like symptoms and can develop into severe dengue, which can be life-threatening. The disease is transmitted primarily by Aedes aegypti mosquitoes.</p><h2>Symptoms</h2><ul><li>High fever (104°F/40°C)</li><li>Severe headache</li><li>Pain behind the eyes</li><li>Joint and muscle pain</li><li>Nausea and vomiting</li><li>Skin rash</li></ul><h2>Prevention</h2><p>The best way to prevent dengue is to avoid mosquito bites:</p><ul><li>Use mosquito repellent</li><li>Wear long sleeves and pants</li><li>Remove standing water around your home</li><li>Use mosquito nets while sleeping</li><li>Install window screens</li></ul><h2>Treatment</h2><p>There is no specific treatment for dengue fever. Management focuses on:</p><ul><li>Rest and hydration</li><li>Pain relievers (acetaminophen, NOT aspirin)</li><li>Monitoring for warning signs of severe dengue</li><li>Seeking immediate medical care if symptoms worsen</li></ul><h2>When to Seek Emergency Care</h2><p>Contact a healthcare provider immediately if you experience:</p><ul><li>Severe abdominal pain</li><li>Persistent vomiting</li><li>Bleeding from nose or gums</li><li>Blood in urine or stool</li><li>Difficulty breathing</li><li>Extreme fatigue or restlessness</li></ul>",
+  "author": "Dr. Rahman Ahmed",
+  "createdAt": "2025-01-15",
+  "updatedAt": "2025-01-20",
+  "tags": ["dengue", "mosquito", "fever", "prevention", "infectious-disease"],
+  "thumbnail": "/images/health/dengue-prevention.jpg"
+}

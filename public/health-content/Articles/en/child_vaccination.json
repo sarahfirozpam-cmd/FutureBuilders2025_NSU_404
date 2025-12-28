@@ -1,0 +1,11 @@
+{
+  "id": "child-vaccination-001",
+  "title": "Complete Child Vaccination Schedule",
+  "category": "child",
+  "summary": "A comprehensive guide to childhood vaccinations, including timing and importance of each vaccine.",
+  "content": "<h2>Why Vaccinate Your Child?</h2><p>Vaccines protect children from serious diseases by training their immune systems to recognize and fight specific infections. Following the recommended vaccination schedule is one of the most important things you can do for your child's health.</p><h2>Birth to 6 Weeks</h2><ul><li>BCG (Tuberculosis)</li><li>OPV-0 (Polio)</li><li>Hepatitis B Birth Dose</li></ul><h2>6 Weeks</h2><ul><li>DPT-1 (Diphtheria, Pertussis, Tetanus)</li><li>OPV-1</li><li>Hepatitis B-1</li><li>Hib-1 (Haemophilus influenzae type b)</li><li>PCV-1 (Pneumococcal)</li></ul><h2>10 Weeks</h2><ul><li>DPT-2</li><li>OPV-2</li><li>Hepatitis B-2</li><li>Hib-2</li><li>PCV-2</li></ul><h2>14 Weeks</h2><ul><li>DPT-3</li><li>OPV-3</li><li>Hepatitis B-3</li><li>Hib-3</li><li>PCV-3</li><li>IPV (Inactivated Polio Vaccine)</li></ul><h2>9 Months</h2><ul><li>Measles-Rubella (MR-1)</li></ul><h2>15 Months</h2><ul><li>MMR (Measles, Mumps, Rubella)</li><li>Varicella (Chickenpox)</li></ul><h2>Important Notes</h2><ul><li>Keep a vaccination record card</li><li>Never skip vaccines</li><li>Report any severe reactions to your doctor</li><li>Mild fever after vaccination is normal</li></ul>",
+  "author": "Dr. Fatema Begum",
+  "createdAt": "2025-01-10",
+  "tags": ["vaccination", "children", "immunization", "health"],
+  "thumbnail": "/images/health/child-vaccine.jpg"
+}

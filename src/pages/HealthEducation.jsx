@@ -11,7 +11,8 @@ import {
   Chip,
   TextField,
   InputAdornment,
-  Stack
+  Stack,
+  CircularProgress
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -28,6 +29,9 @@ const HealthEducation = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [content, setContent] = useState([]);
+  const [allContent, setAllContent] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const categories = [
     { id: 'all', name: { en: 'All', bn: 'সব' } },
@@ -40,104 +44,42 @@ const HealthEducation = () => {
     { id: 'hygiene', name: { en: 'Hygiene', bn: 'স্বাস্থ্যবিধি' } }
   ];
 
-  // Sample health content
-  const healthContent = [
-    {
-      id: 1,
-      category: 'infectious',
-      title: { en: 'Understanding Dengue Fever', bn: 'ডেঙ্গু জ্বর বোঝা' },
-      description: {
-        en: 'Learn about dengue symptoms, prevention, and treatment',
-        bn: 'ডেঙ্গুর উপসর্গ, প্রতিরোধ এবং চিকিৎসা সম্পর্কে জানুন'
-      },
-      image: '/content/dengue.jpg',
-      size: '2.5 MB'
-    },
-    {
-      id: 2,
-      category: 'maternal',
-      title: { en: 'Prenatal Care Essentials', bn: 'প্রসবপূর্ব যত্নের প্রয়োজনীয়তা' },
-      description: {
-        en: 'Important steps for a healthy pregnancy',
-        bn: 'একটি স্বাস্থ্যকর গর্ভাবস্থার জন্য গুরুত্বপূর্ণ পদক্ষেপ'
-      },
-      image: '/content/prenatal.jpg',
-      size: '3.1 MB'
-    },
-    {
-      id: 3,
-      category: 'child',
-      title: { en: 'Child Vaccination Schedule', bn: 'শিশু টিকাকরণ তালিকা' },
-      description: {
-        en: 'Complete vaccination guide for children',
-        bn: 'শিশুদের জন্য সম্পূর্ণ টিকাকরণ নির্দেশিকা'
-      },
-      image: '/content/vaccination.jpg',
-      size: '1.8 MB'
-    },
-    {
-      id: 4,
-      category: 'chronic',
-      title: { en: 'Managing Diabetes', bn: 'ডায়াবেটিস পরিচালনা' },
-      description: {
-        en: 'Tips for controlling blood sugar levels',
-        bn: 'রক্তে শর্করার মাত্রা নিয়ন্ত্রণের টিপস'
-      },
-      image: '/content/diabetes.jpg',
-      size: '2.2 MB'
-    },
-    {
-      id: 5,
-      category: 'nutrition',
-      title: { en: 'Balanced Diet Guide', bn: 'সুষম খাদ্য নির্দেশিকা' },
-      description: {
-        en: 'Learn about nutritious eating habits',
-        bn: 'পুষ্টিকর খাদ্যাভ্যাস সম্পর্কে জানুন'
-      },
-      image: '/content/nutrition.jpg',
-      size: '2.8 MB'
-    },
-    {
-      id: 6,
-      category: 'hygiene',
-      title: { en: 'Hand Washing Techniques', bn: 'হাত ধোয়ার কৌশল' },
-      description: {
-        en: 'Proper hand hygiene to prevent infections',
-        bn: 'সংক্রমণ প্রতিরোধে সঠিক হাত স্বাস্থ্যবিধি'
-      },
-      image: '/content/handwashing.jpg',
-      size: '1.2 MB'
-    },
-    {
-      id: 7,
-      category: 'general',
-      title: { en: 'Common Cold vs Flu', bn: 'সাধারণ সর্দি বনাম ফ্লু' },
-      description: {
-        en: 'Differences and treatment options',
-        bn: 'পার্থক্য এবং চিকিৎসার বিকল্প'
-      },
-      image: '/content/cold-flu.jpg',
-      size: '1.9 MB'
-    },
-    {
-      id: 8,
-      category: 'chronic',
-      title: { en: 'Hypertension Management', bn: 'উচ্চ রক্তচাপ ব্যবস্থাপনা' },
-      description: {
-        en: 'Control high blood pressure naturally',
-        bn: 'প্রাকৃতিকভাবে উচ্চ রক্তচাপ নিয়ন্ত্রণ করুন'
-      },
-      image: '/content/hypertension.jpg',
-      size: '2.4 MB'
-    }
-  ];
-
+  // Load content from JSON files
   useEffect(() => {
-    loadContent();
-  }, [selectedCategory, searchQuery]);
+    loadHealthContent();
+  }, []);
 
-  const loadContent = () => {
-    let filtered = healthContent;
+  const loadHealthContent = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Import the content loader service
+      const contentLoader = (await import('../services/contentLoader')).default;
+
+      // Load articles from both languages
+      const enArticles = await contentLoader.loadArticles('en');
+      const bnArticles = await contentLoader.loadArticles('bn');
+
+      // Merge articles by id, creating bilingual content
+      const mergedContent = contentLoader.mergeArticles(enArticles, bnArticles);
+
+      setAllContent(mergedContent);
+      setLoading(false);
+    } catch (err) {
+      console.error('Error loading content:', err);
+      setError('Failed to load health content. Please ensure content files are in place.');
+      setLoading(false);
+    }
+  };
+
+  // Filter content based on category and search
+  useEffect(() => {
+    filterContent();
+  }, [selectedCategory, searchQuery, allContent]);
+
+  const filterContent = () => {
+    let filtered = allContent;
 
     if (selectedCategory !== 'all') {
       filtered = filtered.filter(item => item.category === selectedCategory);
@@ -155,10 +97,7 @@ const HealthEducation = () => {
 
   const handleDownload = async (item) => {
     try {
-      // Simulate download
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Save to IndexedDB
+      // Save to IndexedDB for offline access
       await db.healthContent.add({
         ...item,
         downloaded: true,
@@ -177,6 +116,27 @@ const HealthEducation = () => {
   const isDownloaded = (itemId) => {
     return downloadedContent.some(item => item.id === itemId);
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={{ textAlign: 'center', py: 8 }}>
+        <Typography variant="h6" color="error" gutterBottom>
+          {error}
+        </Typography>
+        <Button variant="contained" onClick={loadHealthContent}>
+          Retry
+        </Button>
+      </Box>
+    );
+  }
 
   return (
     <Box>
@@ -223,15 +183,20 @@ const HealthEducation = () => {
                 component="div"
                 sx={{
                   height: 140,
-                  bgcolor: 'primary.light',
+                  bgcolor: item.image ? 'transparent' : 'primary.light',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  backgroundImage: item.image ? `url(${item.image})` : 'none',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
                 }}
               >
-                <Typography variant="h6" color="white">
-                  {item.title[language].substring(0, 2).toUpperCase()}
-                </Typography>
+                {!item.image && (
+                  <Typography variant="h6" color="white">
+                    {item.title[language].substring(0, 2).toUpperCase()}
+                  </Typography>
+                )}
               </CardMedia>
               <CardContent sx={{ flexGrow: 1 }}>
                 <Typography variant="h6" gutterBottom>
@@ -240,13 +205,16 @@ const HealthEducation = () => {
                 <Typography variant="body2" color="text.secondary" paragraph>
                   {item.description[language]}
                 </Typography>
-                <Stack direction="row" spacing={1}>
+                <Stack direction="row" spacing={1} flexWrap="wrap" gap={0.5}>
                   <Chip
                     label={categories.find(c => c.id === item.category)?.name[language]}
                     size="small"
                     variant="outlined"
                   />
                   <Chip label={item.size} size="small" variant="outlined" />
+                  {item.author && (
+                    <Chip label={item.author} size="small" variant="outlined" />
+                  )}
                 </Stack>
               </CardContent>
               <CardActions>
@@ -276,7 +244,7 @@ const HealthEducation = () => {
         ))}
       </Grid>
 
-      {content.length === 0 && (
+      {content.length === 0 && !loading && (
         <Box sx={{ textAlign: 'center', py: 8 }}>
           <Typography variant="body1" color="text.secondary">
             No content found matching your search
