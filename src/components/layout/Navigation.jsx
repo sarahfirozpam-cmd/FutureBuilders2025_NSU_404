@@ -37,7 +37,15 @@ const Navigation = () => {
         left: 0, 
         right: 0,
         zIndex: 1000,
-        overflow: 'auto'
+        overflowX: 'auto',
+        overflowY: 'hidden',
+        '&::-webkit-scrollbar': {
+          height: '3px'
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: 'rgba(0,0,0,.2)',
+          borderRadius: '3px'
+        }
       }} 
       elevation={3}
     >
@@ -48,24 +56,23 @@ const Navigation = () => {
         }}
         showLabels
         sx={{
-          width: 'max-content',
-          minWidth: '100%',
+          width: 'auto',
+          display: 'flex',
+          flexWrap: 'nowrap',
           '& .MuiBottomNavigationAction-root': {
-            minWidth: { xs: '70px', sm: 'auto' },
-            maxWidth: { xs: '90px', sm: '168px' },
-            padding: { xs: '6px 4px', sm: '6px 12px' },
-            fontSize: { xs: '0.6rem', sm: '0.75rem' },
+            minWidth: '60px',
+            maxWidth: '85px',
+            padding: '6px 2px',
+            flex: '0 0 auto',
             '& .MuiBottomNavigationAction-label': {
-              fontSize: { xs: '0.6rem', sm: '0.75rem' },
+              fontSize: '0.55rem',
               whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
               '&.Mui-selected': {
-                fontSize: { xs: '0.65rem', sm: '0.8rem' }
+                fontSize: '0.6rem'
               }
             },
             '& .MuiSvgIcon-root': {
-              fontSize: { xs: '1.2rem', sm: '1.5rem' }
+              fontSize: '1.1rem'
             }
           }
         }}

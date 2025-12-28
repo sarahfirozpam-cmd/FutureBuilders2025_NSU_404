@@ -125,7 +125,7 @@ const Dashboard = () => {
       </Typography>
       <Grid container spacing={2} sx={{ mb: 4 }}>
         {quickActions.map((action, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index}>
+          <Grid item xs={6} sm={6} md={3} key={index}>
             <Card 
               sx={{ 
                 height: '100%',
@@ -138,21 +138,31 @@ const Dashboard = () => {
               }}
               onClick={() => navigate(action.path)}
             >
-              <CardContent>
+              <CardContent sx={{ p: { xs: 1.5, sm: 2 } }}>
                 <Avatar
                   sx={{
                     bgcolor: action.color,
-                    width: 56,
-                    height: 56,
-                    mb: 2
+                    width: { xs: 40, sm: 56 },
+                    height: { xs: 40, sm: 56 },
+                    mb: { xs: 1, sm: 2 },
+                    '& .MuiSvgIcon-root': {
+                      fontSize: { xs: '1.2rem', sm: '1.5rem' }
+                    }
                   }}
                 >
                   {action.icon}
                 </Avatar>
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h6" gutterBottom sx={{ fontSize: { xs: '0.9rem', sm: '1.25rem' } }}>
                   {action.title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography 
+                  variant="body2" 
+                  color="text.secondary"
+                  sx={{ 
+                    fontSize: { xs: '0.7rem', sm: '0.875rem' },
+                    display: { xs: 'none', sm: 'block' }
+                  }}
+                >
                   {action.description}
                 </Typography>
               </CardContent>
