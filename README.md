@@ -1,3 +1,11 @@
+Future Builders AI Hackathon 2025 Submission(Round 2)
+Team Name: NSU_404
+Members: Fahim Muntasir Galib, Sami Sharif Arka, Sarah Firoz Pam
+
+Problem Statement: "The Silent Struggle: Why Medical Support in Bangladesh's Hill Tracks and Rural Regions Remains Hard to Find."
+
+Solution Overview: GramSheba AI, n offline-first AI based preliminary diagnosis and remote consultancy service.
+
 # GramSheba AI: Offline Primary Healthcare MVP
 
 **GramSheba AI** is a Progressive Web Application (PWA) designed to provide critical primary healthcare support to users in rural Bangladesh. Built with an "Offline-First" philosophy, it leverages on-device machine learning to provide symptom analysis and health triage even in areas with zero internet connectivity.
@@ -120,6 +128,11 @@ All user inputs are saved to **Dexie.js** first. The `Background Sync` API (via 
 * **Low-Bandwidth Mode:** Images and videos are lazily loaded and cached only upon user request to save data.
 
 ---
+
+## AI Tools Disclosure
+Assistance was taken from the following AI tools in various stages of the product development and planning:
+1. GEMINI 3 Thinking
+2. CLAUDE 4.5 SONNET
 
 ## 📝 License
 
