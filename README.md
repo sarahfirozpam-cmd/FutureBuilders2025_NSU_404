@@ -7,6 +7,8 @@ Problem Statement: "The Silent Struggle: Why Medical Support in Bangladesh's Hil
 
 Solution Overview: GramSheba AI, an offline-first AI based preliminary diagnosis and remote consultancy service.
 
+# Visual of Desktop and Mobile environment are provided in the files visualizerDesktop.pdf and visualizerMobile.pdf in te root folder of the repository.
+
 # GramSheba AI: Offline Primary Healthcare MVP
 
 **GramSheba AI** is a Progressive Web Application (PWA) designed to provide critical primary healthcare support to users in rural Bangladesh. Built with an "Offline-First" philosophy, it leverages on-device machine learning to provide symptom analysis and health triage even in areas with zero internet connectivity.
