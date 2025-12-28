@@ -1,31 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Box,
-  Typography,
-  Grid,
-  Card,
-  CardContent,
-  CardMedia,
-  CardActions,
-  Button,
-  Chip,
-  TextField,
-  InputAdornment,
-  Stack,
-  CircularProgress
+  Box, Typography, Grid, Card, CardContent, CardMedia,
+  CardActions, Button, Chip, TextField, InputAdornment,
+  Stack, CircularProgress, Dialog, AppBar, Toolbar, IconButton, 
+  Slide, Container, Divider
 } from '@mui/material';
 import {
-  Search as SearchIcon,
-  Download as DownloadIcon,
-  CheckCircle as CheckIcon
+  Search as SearchIcon, Download as DownloadIcon,
+  CheckCircle as CheckIcon, Close as CloseIcon,
+  MenuBook as ReadIcon
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../store/useAppStore';
 import db from '../services/db';
 
+// Animation for the article reader
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 const HealthEducation = () => {
   const { t } = useTranslation();
-  const { language, downloadedContent, addDownloadedContent } = useAppStore();
+  const { language = 'en', downloadedContent = [], addDownloadedContent } = useAppStore();
+  
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [content, setContent] = useState([]);
@@ -33,18 +30,17 @@ const HealthEducation = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // State for the article reader popup
+  const [selectedArticle, setSelectedArticle] = useState(null);
+
   const categories = [
     { id: 'all', name: { en: 'All', bn: 'সব' } },
-    { id: 'general', name: { en: 'General Health', bn: 'সাধারণ স্বাস্থ্য' } },
-    { id: 'maternal', name: { en: 'Maternal Health', bn: 'মাতৃ স্বাস্থ্য' } },
+    { id: 'general', name: { en: 'General', bn: 'সাধারণ' } },
+    { id: 'maternal', name: { en: 'Maternal', bn: 'মাতৃ স্বাস্থ্য' } },
     { id: 'child', name: { en: 'Child Health', bn: 'শিশু স্বাস্থ্য' } },
-    { id: 'infectious', name: { en: 'Infectious Diseases', bn: 'সংক্রামক রোগ' } },
-    { id: 'chronic', name: { en: 'Chronic Conditions', bn: 'দীর্ঘস্থায়ী রোগ' } },
-    { id: 'nutrition', name: { en: 'Nutrition', bn: 'পুষ্টি' } },
-    { id: 'hygiene', name: { en: 'Hygiene', bn: 'স্বাস্থ্যবিধি' } }
+    { id: 'infectious', name: { en: 'Infectious', bn: 'সংক্রামক' } }
   ];
 
-  // Load content from JSON files
   useEffect(() => {
     loadHealthContent();
   }, []);
@@ -53,204 +49,174 @@ const HealthEducation = () => {
     try {
       setLoading(true);
       setError(null);
-
-      // Import the content loader service
+      
       const contentLoader = (await import('../services/contentLoader')).default;
+      
+      // Load and Merge
+      const en = await contentLoader.loadArticles('en');
+      const bn = await contentLoader.loadArticles('bn');
+      const merged = contentLoader.mergeArticles(en, bn);
 
-      // Load articles from both languages
-      const enArticles = await contentLoader.loadArticles('en');
-      const bnArticles = await contentLoader.loadArticles('bn');
+      if (merged.length === 0) {
+        throw new Error("No articles found in manifest.");
+      }
 
-      // Merge articles by id, creating bilingual content
-      const mergedContent = contentLoader.mergeArticles(enArticles, bnArticles);
-
-      setAllContent(mergedContent);
+      setAllContent(merged);
       setLoading(false);
     } catch (err) {
-      console.error('Error loading content:', err);
-      setError('Failed to load health content. Please ensure content files are in place.');
+      console.error('Loader Error:', err);
+      setError('Content not found. Please check your public/health-content/ folder.');
       setLoading(false);
     }
   };
 
-  // Filter content based on category and search
   useEffect(() => {
-    filterContent();
-  }, [selectedCategory, searchQuery, allContent]);
-
-  const filterContent = () => {
-    let filtered = allContent;
-
-    if (selectedCategory !== 'all') {
-      filtered = filtered.filter(item => item.category === selectedCategory);
-    }
-
-    if (searchQuery) {
-      filtered = filtered.filter(item =>
-        item.title[language].toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.description[language].toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
+    const filtered = allContent.filter(item => {
+      const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
+      const matchesSearch = item.title[language]?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            item.description[language]?.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
     setContent(filtered);
-  };
+  }, [selectedCategory, searchQuery, allContent, language]);
 
-  const handleDownload = async (item) => {
+  const handleDownload = async (e, item) => {
+    e.stopPropagation(); // Prevents opening the reader when clicking download
     try {
-      // Save to IndexedDB for offline access
-      await db.healthContent.add({
-        ...item,
-        downloaded: true,
-        downloadedAt: new Date().toISOString()
-      });
-
-      addDownloadedContent(item);
-
-      alert(`${item.title[language]} downloaded successfully!`);
-    } catch (error) {
-      console.error('Download error:', error);
-      alert('Failed to download content');
+      if (db && db.healthContent) {
+        await db.healthContent.put({ ...item, downloaded: true, downloadedAt: new Date().toISOString() });
+        addDownloadedContent(item);
+      }
+    } catch (err) {
+      console.error('DB Error:', err);
     }
   };
 
-  const isDownloaded = (itemId) => {
-    return downloadedContent.some(item => item.id === itemId);
-  };
+  if (loading) return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 10 }}>
+      <CircularProgress sx={{ mb: 2 }} />
+      <Typography>Loading Medical Resources...</Typography>
+    </Box>
+  );
 
-  if (loading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Box sx={{ textAlign: 'center', py: 8 }}>
-        <Typography variant="h6" color="error" gutterBottom>
-          {error}
-        </Typography>
-        <Button variant="contained" onClick={loadHealthContent}>
-          Retry
-        </Button>
-      </Box>
-    );
-  }
+  if (error) return (
+    <Box sx={{ textAlign: 'center', py: 10 }}>
+      <Typography color="error" variant="h6">{error}</Typography>
+      <Button onClick={loadHealthContent} sx={{ mt: 2 }} variant="outlined">Retry Loading</Button>
+    </Box>
+  );
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>
-        {t('education.title')}
-      </Typography>
+      <Typography variant="h4" fontWeight="bold" sx={{ mb: 3 }}>Health Education</Typography>
 
-      {/* Search Bar */}
       <TextField
         fullWidth
-        variant="outlined"
-        placeholder={t('education.search')}
+        placeholder="Search for symptoms or diseases..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        sx={{ mb: 3 }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          )
-        }}
+        sx={{ mb: 3, bgcolor: 'white' }}
+        InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment> }}
       />
 
-      {/* Category Filters */}
-      <Stack direction="row" spacing={1} sx={{ mb: 3, flexWrap: 'wrap', gap: 1 }}>
-        {categories.map((category) => (
+      <Stack direction="row" spacing={1} sx={{ mb: 4, overflowX: 'auto', pb: 1 }}>
+        {categories.map((cat) => (
           <Chip
-            key={category.id}
-            label={category.name[language]}
-            onClick={() => setSelectedCategory(category.id)}
-            color={selectedCategory === category.id ? 'primary' : 'default'}
-            variant={selectedCategory === category.id ? 'filled' : 'outlined'}
+            key={cat.id}
+            label={cat.name[language]}
+            onClick={() => setSelectedCategory(cat.id)}
+            color={selectedCategory === cat.id ? "primary" : "default"}
           />
         ))}
       </Stack>
 
-      {/* Content Grid */}
       <Grid container spacing={3}>
         {content.map((item) => (
           <Grid item xs={12} sm={6} md={4} key={item.id}>
-            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Card 
+              onClick={() => setSelectedArticle(item)}
+              sx={{ 
+                height: '100%', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                cursor: 'pointer',
+                transition: '0.3s',
+                '&:hover': { transform: 'translateY(-5px)', boxShadow: 6 }
+              }}
+            >
               <CardMedia
-                component="div"
-                sx={{
-                  height: 140,
-                  bgcolor: item.image ? 'transparent' : 'primary.light',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundImage: item.image ? `url(${item.image})` : 'none',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center'
-                }}
-              >
-                {!item.image && (
-                  <Typography variant="h6" color="white">
-                    {item.title[language].substring(0, 2).toUpperCase()}
-                  </Typography>
-                )}
-              </CardMedia>
+                component="img"
+                height="140"
+                image={item.thumbnail || "/api/placeholder/400/200"}
+                alt={item.title[language]}
+              />
               <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="h6" gutterBottom>
-                  {item.title[language]}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" paragraph>
+                <Typography variant="h6" gutterBottom>{item.title[language]}</Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                   {item.description[language]}
                 </Typography>
-                <Stack direction="row" spacing={1} flexWrap="wrap" gap={0.5}>
-                  <Chip
-                    label={categories.find(c => c.id === item.category)?.name[language]}
-                    size="small"
-                    variant="outlined"
-                  />
-                  <Chip label={item.size} size="small" variant="outlined" />
-                  {item.author && (
-                    <Chip label={item.author} size="small" variant="outlined" />
-                  )}
-                </Stack>
+                <Chip label={item.category} size="small" variant="outlined" />
               </CardContent>
-              <CardActions>
-                {isDownloaded(item.id) ? (
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    startIcon={<CheckIcon />}
-                    color="success"
-                    disabled
-                  >
-                    Downloaded
-                  </Button>
-                ) : (
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    startIcon={<DownloadIcon />}
-                    onClick={() => handleDownload(item)}
-                  >
-                    {t('education.download')}
-                  </Button>
-                )}
+              <CardActions sx={{ p: 2, pt: 0 }}>
+                <Button 
+                  fullWidth 
+                  variant={downloadedContent.some(d => d.id === item.id) ? "outlined" : "contained"}
+                  color={downloadedContent.some(d => d.id === item.id) ? "success" : "primary"}
+                  startIcon={downloadedContent.some(d => d.id === item.id) ? <CheckIcon /> : <DownloadIcon />}
+                  onClick={(e) => handleDownload(e, item)}
+                >
+                  {downloadedContent.some(d => d.id === item.id) ? "Offline Ready" : "Download"}
+                </Button>
               </CardActions>
             </Card>
           </Grid>
         ))}
       </Grid>
 
-      {content.length === 0 && !loading && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant="body1" color="text.secondary">
-            No content found matching your search
+      {/* --- ARTICLE READER DIALOG --- */}
+      <Dialog 
+        fullScreen 
+        open={Boolean(selectedArticle)} 
+        onClose={() => setSelectedArticle(null)} 
+        TransitionComponent={Transition}
+      >
+        <AppBar sx={{ position: 'relative', bgcolor: 'primary.main' }}>
+          <Toolbar>
+            <IconButton edge="start" color="inherit" onClick={() => setSelectedArticle(null)}>
+              <CloseIcon />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6">
+              {selectedArticle?.title[language]}
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        
+        <Container maxWidth="md" sx={{ py: 6 }}>
+          <Typography variant="h3" component="h1" gutterBottom fontWeight="bold">
+            {selectedArticle?.title[language]}
           </Typography>
-        </Box>
-      )}
+          
+          <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
+            <Chip icon={<ReadIcon />} label={selectedArticle?.category} color="primary" variant="outlined" />
+            <Typography variant="caption" color="text.secondary">
+              Published: {selectedArticle?.createdAt}
+            </Typography>
+          </Stack>
+
+          <Divider sx={{ mb: 4 }} />
+
+          {/* Renders the actual HTML content from your JSON */}
+          <Box 
+            sx={{ 
+              '& p': { lineHeight: 1.7, mb: 2, fontSize: '1.1rem' },
+              '& h2': { mt: 4, mb: 2, color: 'primary.dark' },
+              '& ul': { mb: 3 },
+              '& li': { mb: 1 }
+            }}
+            dangerouslySetInnerHTML={{ __html: selectedArticle?.content[language] || '' }} 
+          />
+        </Container>
+      </Dialog>
     </Box>
   );
 };
