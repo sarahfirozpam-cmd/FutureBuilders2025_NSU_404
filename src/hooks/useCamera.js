@@ -16,9 +16,22 @@ export const useCamera = () => {
     setIsSupported(!!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia));
   }, []);
 
+  // Restart camera when facingMode changes
+  useEffect(() => {
+    if (isActive) {
+      startCamera();
+    }
+  }, [facingMode]);
+
   const startCamera = useCallback(async () => {
     try {
       setError(null);
+      
+      // Stop existing stream if any
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+        streamRef.current = null;
+      }
       
       const constraints = {
         video: {
@@ -33,6 +46,12 @@ export const useCamera = () => {
       
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        // Ensure video plays after setting srcObject
+        try {
+          await videoRef.current.play();
+        } catch (playError) {
+          console.warn('Autoplay prevented, user interaction needed:', playError);
+        }
       }
       
       setIsActive(true);
@@ -84,9 +103,8 @@ export const useCamera = () => {
   }, []);
 
   const switchCamera = useCallback(() => {
-    stopCamera();
     setFacingMode(prev => prev === 'user' ? 'environment' : 'user');
-  }, [stopCamera]);
+  }, []);
 
   const clearImage = useCallback(() => {
     setCapturedImage(null);

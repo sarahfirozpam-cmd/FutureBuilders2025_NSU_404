@@ -129,10 +129,56 @@ All user inputs are saved to **Dexie.js** first. The `Background Sync` API (via 
 
 ---
 
-## AI Tools Disclosure
+## 🤖 AI Tools Disclosure
+
 Assistance was taken from the following AI tools in various stages of the product development and planning:
-1. GEMINI 3 Thinking
-2. CLAUDE 4.5 SONNET
+
+### 1. **GEMINI 3 Thinking**
+   - **Used for:** Initial problem analysis, solution architecture planning, and backend logic design
+   - **Role:** Strategic planning and system design consultation
+
+### 2. **CLAUDE 4.5 SONNET** (via GitHub Copilot)
+   - **Used for:** Complete UI/UX implementation and design system development
+   - **Role:** Primary development assistant for the entire user interface
+   
+   **Specific UI Implementation Details:**
+   
+   **Color Palette & Design System:**
+   - Implemented custom earthy color scheme based on provided design references:
+     - **CAFÉ NOIR** (#4C3D19) - Primary dark text and gradients
+     - **KOMBU GREEN** (#354024) - Primary action colors
+     - **MOSS GREEN** (#889063) - Secondary accents
+     - **TAN** (#CFBB99) - Card backgrounds
+     - **BONE** (#E5D7C4) - Page background
+   
+   **Technical Implementation:**
+   - Created comprehensive Material-UI theme configuration with custom shadows, typography (Inter font family), and component overrides
+   - Designed all 6 main pages: Dashboard, Symptom Checker, Vitals Monitor, Visual Scanner, Health Education, and Telemedicine
+   - Implemented responsive layouts with mobile-first approach
+   - Added smooth transitions and hover effects (optimized for performance)
+   - Created reusable component library: AppBar, Navigation, LoadingScreen, OfflineIndicator
+   - Implemented gradient backgrounds and glassmorphism effects
+   - Fixed camera functionality bugs in Visual Scanner (auto-restart on facing mode change, proper stream cleanup)
+   
+   **Performance Optimization:**
+   - Removed expensive backdrop-filter effects
+   - Simplified animation timing functions
+   - Optimized shadow complexity
+   - Reduced gradient layers for faster rendering
+   - Minimized transform distances for smooth 60fps animations
+   
+   **Accessibility Features:**
+   - Custom scrollbar styling
+   - Smooth scroll behavior with motion preferences
+   - Proper ARIA labels and semantic HTML
+   - High contrast ratios for text readability
+   - Touch-friendly button sizes (min 48px)
+
+   **Code Quality:**
+   - Multi-file batch editing for consistent updates
+   - Maintained clean component structure
+   - Follow React best practices and Material-UI guidelines
+   - Comprehensive error handling and loading states
 
 ## 📝 License
 
