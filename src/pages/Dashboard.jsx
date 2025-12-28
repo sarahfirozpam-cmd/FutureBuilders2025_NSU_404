@@ -64,28 +64,28 @@ const Dashboard = () => {
       title: t('dashboard.checkSymptoms'),
       description: 'AI-powered symptom analysis',
       icon: <SymptomIcon fontSize="large" />,
-      color: '#1976d2',
+      gradient: 'linear-gradient(135deg, #354024 0%, #4C3D19 100%)',
       path: '/symptom-checker'
     },
     {
       title: t('dashboard.recordVitals'),
       description: 'Monitor your vital signs',
       icon: <VitalsIcon fontSize="large" />,
-      color: '#d32f2f',
+      gradient: 'linear-gradient(135deg, #889063 0%, #354024 100%)',
       path: '/vitals'
     },
     {
       title: t('dashboard.learnHealth'),
       description: 'Access health resources',
       icon: <EducationIcon fontSize="large" />,
-      color: '#388e3c',
+      gradient: 'linear-gradient(135deg, #CFBB99 0%, #889063 100%)',
       path: '/education'
     },
     {
       title: t('dashboard.consultDoctor'),
       description: 'Request telemedicine consultation',
       icon: <TelemedicineIcon fontSize="large" />,
-      color: '#f57c00',
+      gradient: 'linear-gradient(135deg, #4C3D19 0%, #354024 100%)',
       path: '/telemedicine'
     }
   ];
@@ -105,22 +105,58 @@ const Dashboard = () => {
   return (
     <Box>
       {/* Welcome Section */}
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" gutterBottom>
+      <Box 
+        sx={{ 
+          mb: 4,
+          p: { xs: 3, sm: 4 },
+          background: 'rgba(53, 64, 36, 0.06)',
+          borderRadius: 3
+        }}
+      >
+        <Typography 
+          variant="h4" 
+          gutterBottom
+          sx={{
+            fontSize: { xs: '1.75rem', sm: '2.125rem' },
+            fontWeight: 700,
+            background: 'linear-gradient(135deg, #354024 0%, #4C3D19 100%)',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            mb: 1
+          }}
+        >
           {t('dashboard.welcome')}
+        </Typography>
+        <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
+          Your health companion, powered by AI
         </Typography>
         {modelsLoaded && (
           <Chip
             icon={<CheckIcon />}
             label="AI Models Ready"
             color="success"
-            size="small"
+            size="medium"
+            sx={{ 
+              fontWeight: 600,
+              px: 1,
+              background: 'linear-gradient(135deg, #354024 0%, #4C3D19 100%)',
+              color: '#E5D7C4'
+            }}
           />
         )}
       </Box>
 
       {/* Quick Actions */}
-      <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
+      <Typography 
+        variant="h5" 
+        gutterBottom 
+        sx={{ 
+          mb: 3,
+          fontWeight: 700,
+          color: '#4C3D19'
+        }}
+      >
         {t('dashboard.quickActions')}
       </Typography>
       <Grid container spacing={2} sx={{ mb: 4 }}>
@@ -130,37 +166,51 @@ const Dashboard = () => {
               sx={{ 
                 height: '100%',
                 cursor: 'pointer',
-                transition: 'transform 0.2s',
+                background: action.gradient,
+                color: '#E5D7C4',
+                position: 'relative',
+                overflow: 'hidden',
+                transition: 'all 0.2s ease',
                 '&:hover': {
                   transform: 'translateY(-4px)',
-                  boxShadow: 4
+                  boxShadow: '0px 12px 28px rgba(76, 61, 25, 0.2)'
                 }
               }}
               onClick={() => navigate(action.path)}
             >
-              <CardContent sx={{ p: { xs: 1.5, sm: 2 } }}>
+              <CardContent sx={{ p: { xs: 2, sm: 3 }, textAlign: 'center' }}>
                 <Avatar
                   sx={{
-                    bgcolor: action.color,
-                    width: { xs: 40, sm: 56 },
-                    height: { xs: 40, sm: 56 },
-                    mb: { xs: 1, sm: 2 },
+                    bgcolor: 'rgba(255, 255, 255, 0.15)',
+                    color: '#E5D7C4',
+                    width: { xs: 48, sm: 64 },
+                    height: { xs: 48, sm: 64 },
+                    mb: { xs: 1.5, sm: 2 },
+                    mx: 'auto',
                     '& .MuiSvgIcon-root': {
-                      fontSize: { xs: '1.2rem', sm: '1.5rem' }
+                      fontSize: { xs: '1.5rem', sm: '2rem' }
                     }
                   }}
                 >
                   {action.icon}
                 </Avatar>
-                <Typography variant="h6" gutterBottom sx={{ fontSize: { xs: '0.9rem', sm: '1.25rem' } }}>
+                <Typography 
+                  variant="h6" 
+                  gutterBottom 
+                  sx={{ 
+                    fontSize: { xs: '0.95rem', sm: '1.1rem' },
+                    fontWeight: 700,
+                    color: '#E5D7C4'
+                  }}
+                >
                   {action.title}
                 </Typography>
                 <Typography 
                   variant="body2" 
-                  color="text.secondary"
                   sx={{ 
-                    fontSize: { xs: '0.7rem', sm: '0.875rem' },
-                    display: { xs: 'none', sm: 'block' }
+                    fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                    display: { xs: 'none', sm: 'block' },
+                    color: 'rgba(229, 215, 196, 0.8)'
                   }}
                 >
                   {action.description}
@@ -172,6 +222,18 @@ const Dashboard = () => {
       </Grid>
 
       {/* Recent Activity */}
+      <Typography 
+        variant="h5" 
+        gutterBottom 
+        sx={{ 
+          mb: 3,
+          mt: 2,
+          fontWeight: 700,
+          color: '#4C3D19'
+        }}
+      >
+        Recent Activity
+      </Typography>
       <Grid container spacing={3}>
         {/* Recent Symptom Checks */}
         <Grid item xs={12} md={6}>

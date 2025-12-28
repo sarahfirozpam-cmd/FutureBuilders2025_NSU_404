@@ -14,10 +14,26 @@ const AppBar = () => {
   const { t } = useTranslation();
 
   return (
-    <MuiAppBar position="fixed" elevation={2}>
-      <Toolbar>
-        <HealthIcon sx={{ mr: 2 }} />
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+    <MuiAppBar 
+      position="fixed" 
+      elevation={0}
+      sx={{
+        background: 'linear-gradient(135deg, #354024 0%, #4C3D19 100%)',
+        borderBottom: '1px solid rgba(229, 215, 196, 0.1)'
+      }}
+    >
+      <Toolbar sx={{ minHeight: { xs: 64, sm: 70 } }}>
+        <HealthIcon sx={{ mr: 2, fontSize: '2rem' }} />
+        <Typography 
+          variant="h6" 
+          component="div" 
+          sx={{ 
+            flexGrow: 1,
+            fontWeight: 700,
+            letterSpacing: '0.02em',
+            fontSize: { xs: '1.1rem', sm: '1.3rem' }
+          }}
+        >
           GramSheba AI
         </Typography>
         <LanguageSwitcher />

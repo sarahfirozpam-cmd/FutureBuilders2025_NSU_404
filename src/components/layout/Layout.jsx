@@ -11,7 +11,8 @@ const Layout = ({ children }) => {
         display: 'flex', 
         flexDirection: 'column', 
         minHeight: '100vh',
-        pb: 0 // Remove bottom padding from main container
+        pb: 0,
+        position: 'relative'
       }}
     >
       <AppBar />
@@ -20,11 +21,13 @@ const Layout = ({ children }) => {
         maxWidth="lg" 
         sx={{ 
           flex: 1,
-          pt: { xs: 9, sm: 10 }, // Top padding for AppBar (64px + margin)
-          pb: { xs: 9, sm: 10 }, // Bottom padding for Navigation (56px + margin)
+          pt: { xs: 9, sm: 10 },
+          pb: { xs: 9, sm: 10 },
           px: { xs: 2, sm: 3 },
           overflowX: 'hidden',
-          width: '100%'
+          width: '100%',
+          position: 'relative',
+          zIndex: 1
         }}
       >
         {children}

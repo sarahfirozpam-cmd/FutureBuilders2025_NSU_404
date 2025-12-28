@@ -93,22 +93,52 @@ const SymptomChecker = () => {
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>
-        {t('symptoms.title')}
-      </Typography>
-      <Typography variant="body1" color="text.secondary" paragraph>
-        {t('symptoms.description')}
-      </Typography>
+      <Box sx={{ mb: 4 }}>
+        <Typography 
+          variant="h4" 
+          gutterBottom
+          sx={{
+            fontWeight: 700,
+            background: 'linear-gradient(135deg, #354024 0%, #4C3D19 100%)',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent'
+          }}
+        >
+          {t('symptoms.title')}
+        </Typography>
+        <Typography variant="body1" color="text.secondary" paragraph>
+          {t('symptoms.description')}
+        </Typography>
+      </Box>
 
       {/* Visual Scanner Button */}
-      <Card sx={{ mb: 3, bgcolor: 'primary.light' }}>
-        <CardContent>
+      <Card 
+        sx={{ 
+          mb: 3, 
+          background: 'linear-gradient(135deg, #889063 0%, #CFBB99 100%)',
+          border: '2px solid rgba(53, 64, 36, 0.12)',
+          transition: 'all 0.2s ease',
+          '&:hover': {
+            transform: 'translateY(-2px)',
+            boxShadow: '0 6px 16px rgba(76, 61, 25, 0.15)'
+          }
+        }}
+      >
+        <CardContent sx={{ p: 3 }}>
           <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
             <Box sx={{ flex: 1 }}>
-              <Typography variant="h6" gutterBottom>
+              <Typography 
+                variant="h6" 
+                gutterBottom
+                sx={{ 
+                  color: '#4C3D19',
+                  fontWeight: 700
+                }}
+              >
                 {t('scanner.title')}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" sx={{ color: '#354024' }}>
                 {t('scanner.description')}
               </Typography>
             </Box>
@@ -117,7 +147,14 @@ const SymptomChecker = () => {
               startIcon={<CameraIcon />}
               onClick={() => navigate('/visual-scanner')}
               size="large"
-              sx={{ whiteSpace: 'nowrap' }}
+              sx={{ 
+                whiteSpace: 'nowrap',
+                background: 'linear-gradient(135deg, #354024 0%, #4C3D19 100%)',
+                color: '#E5D7C4',
+                fontWeight: 600,
+                px: 3,
+                py: 1.5
+              }}
             >
               {t('scanner.startScanning')}
             </Button>
@@ -126,8 +163,8 @@ const SymptomChecker = () => {
       </Card>
 
       {/* Input Section */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
+      <Card sx={{ mb: 3, overflow: 'visible' }}>
+        <CardContent sx={{ p: 3 }}>
           <TextField
             fullWidth
             multiline
@@ -139,15 +176,37 @@ const SymptomChecker = () => {
             onKeyPress={handleKeyPress}
             disabled={analyzing}
             placeholder="e.g., fever, cough, headache, body ache..."
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                fontSize: '1rem',
+                '& fieldset': {
+                  borderColor: '#889063',
+                  borderWidth: 2
+                },
+                '&:hover fieldset': {
+                  borderColor: '#354024'
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#354024'
+                }
+              }
+            }}
           />
 
-          <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+          <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
             <Button
               variant="contained"
-              startIcon={analyzing ? <CircularProgress size={20} /> : <SendIcon />}
+              startIcon={analyzing ? <CircularProgress size={20} sx={{ color: '#E5D7C4' }} /> : <SendIcon />}
               onClick={handleAnalyze}
               disabled={analyzing || !symptoms.trim()}
               fullWidth
+              sx={{
+                py: 1.5,
+                fontSize: '1rem',
+                fontWeight: 600,
+                background: 'linear-gradient(135deg, #354024 0%, #4C3D19 100%)',
+                color: '#E5D7C4'
+              }}
             >
               {analyzing ? t('symptoms.analyzing') : t('common.submit')}
             </Button>
@@ -158,8 +217,14 @@ const SymptomChecker = () => {
                 onClick={startListening}
                 disabled={analyzing}
                 sx={{
-                  border: 1,
-                  borderColor: isListening ? 'error.main' : 'primary.main'
+                  border: 2,
+                  borderColor: isListening ? 'error.main' : '#354024',
+                  width: 56,
+                  height: 56,
+                  bgcolor: isListening ? 'rgba(211, 47, 47, 0.1)' : 'rgba(53, 64, 36, 0.08)',
+                  '&:hover': {
+                    bgcolor: isListening ? 'rgba(211, 47, 47, 0.2)' : 'rgba(53, 64, 36, 0.15)'
+                  }
                 }}
               >
                 <MicIcon />
@@ -185,11 +250,19 @@ const SymptomChecker = () => {
       {results && <SymptomResults results={results} language={language} />}
 
       {/* Information Box */}
-      <Paper sx={{ p: 2, bgcolor: 'info.light', mt: 3 }}>
-        <Stack direction="row" spacing={1} alignItems="flex-start">
-          <InfoIcon color="info" />
+      <Paper 
+        sx={{ 
+          p: 3, 
+          background: 'linear-gradient(135deg, rgba(136, 144, 99, 0.15) 0%, rgba(207, 187, 153, 0.2) 100%)',
+          border: '2px solid rgba(53, 64, 36, 0.15)',
+          mt: 3,
+          borderRadius: 3
+        }}
+      >
+        <Stack direction="row" spacing={2} alignItems="flex-start">
+          <InfoIcon sx={{ color: '#354024', fontSize: '1.5rem' }} />
           <Box>
-            <Typography variant="body2" color="text.primary">
+            <Typography variant="body2" sx={{ color: '#4C3D19', fontWeight: 500 }}>
               <strong>Note:</strong> This tool provides general health information and is not a 
               substitute for professional medical advice. Always consult with a healthcare provider 
               for accurate diagnosis and treatment.

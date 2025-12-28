@@ -55,11 +55,12 @@ const Navigation = () => {
         bottom: 0, 
         left: 0, 
         right: 0,
-        zIndex: 1200, // Above content but below modals
-        borderTop: 1,
-        borderColor: 'divider'
+        zIndex: 1200,
+        background: 'rgba(207, 187, 153, 0.98)',
+        borderTop: '2px solid rgba(53, 64, 36, 0.12)',
+        boxShadow: '0 -2px 12px rgba(76, 61, 25, 0.1)'
       }} 
-      elevation={8}
+      elevation={0}
     >
       <BottomNavigation
         value={location.pathname}
@@ -68,16 +69,33 @@ const Navigation = () => {
         }}
         showLabels
         sx={{
-          height: { xs: 56, sm: 64 },
+          height: { xs: 64, sm: 72 },
+          backgroundColor: 'transparent',
           '& .MuiBottomNavigationAction-root': {
             minWidth: 0,
-            padding: { xs: '6px 0', sm: '6px 12px' }
+            padding: { xs: '8px 4px', sm: '10px 12px' },
+            color: '#4C3D19',
+            transition: 'all 0.2s ease',
+            '&:hover': {
+              backgroundColor: 'rgba(53, 64, 36, 0.06)'
+            },
+            '&.Mui-selected': {
+              color: '#354024',
+              '& .MuiSvgIcon-root': {
+                transform: 'scale(1.1)'
+              }
+            }
           },
           '& .MuiBottomNavigationAction-label': {
-            fontSize: { xs: '0.625rem', sm: '0.75rem' },
+            fontSize: { xs: '0.7rem', sm: '0.8rem' },
+            fontWeight: 600,
             '&.Mui-selected': {
-              fontSize: { xs: '0.625rem', sm: '0.75rem' }
+              fontSize: { xs: '0.7rem', sm: '0.8rem' }
             }
+          },
+          '& .MuiSvgIcon-root': {
+            fontSize: { xs: '1.5rem', sm: '1.7rem' },
+            transition: 'transform 0.3s ease'
           }
         }}
       >

@@ -148,16 +148,39 @@ const VitalsMonitor = () => {
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>
-        {t('vitals.title')}
-      </Typography>
+      <Box sx={{ mb: 4 }}>
+        <Typography 
+          variant="h4" 
+          gutterBottom
+          sx={{
+            fontWeight: 700,
+            background: 'linear-gradient(135deg, #354024 0%, #4C3D19 100%)',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent'
+          }}
+        >
+          {t('vitals.title')}
+        </Typography>
+        <Typography variant="body1" color="text.secondary" paragraph>
+          Monitor your vital signs with AI-powered analysis
+        </Typography>
+      </Box>
 
       <Grid container spacing={3}>
         {/* Input Form */}
         <Grid item xs={12} md={6}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
+          <Card sx={{ overflow: 'visible' }}>
+            <CardContent sx={{ p: 3 }}>
+              <Typography 
+                variant="h6" 
+                gutterBottom
+                sx={{ 
+                  mb: 3,
+                  color: '#4C3D19',
+                  fontWeight: 700
+                }}
+              >
                 Enter Vital Signs
               </Typography>
 

@@ -94,8 +94,8 @@ const HealthEducation = () => {
 
   if (loading) return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 10 }}>
-      <CircularProgress sx={{ mb: 2 }} />
-      <Typography>Loading Medical Resources...</Typography>
+      <CircularProgress sx={{ mb: 2, color: '#354024' }} />
+      <Typography sx={{ color: '#4C3D19', fontWeight: 600 }}>Loading Medical Resources...</Typography>
     </Box>
   );
 
