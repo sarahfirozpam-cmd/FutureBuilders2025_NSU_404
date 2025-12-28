@@ -1,6 +1,6 @@
 {
   "name": "GramSheba AI",
-  "short_name": "HealthAI",
+  "short_name": "GramSheba",
   "description": "AI-powered healthcare support for rural Bangladesh",
   "start_url": "/",
   "display": "standalone",

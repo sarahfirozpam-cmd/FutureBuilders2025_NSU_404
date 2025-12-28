@@ -18,7 +18,7 @@ const AppBar = () => {
       <Toolbar>
         <HealthIcon sx={{ mr: 2 }} />
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Rural Health AI
+          GramSheba AI
         </Typography>
         <LanguageSwitcher />
       </Toolbar>

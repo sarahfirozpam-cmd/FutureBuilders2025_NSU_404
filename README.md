@@ -58,11 +58,6 @@ src/
 ### Installation
 
 1. **Clone the repository:**
-```bash
-git clone https://github.com/your-username/ruralcare-ai.git
-cd ruralcare-ai
-
-```
 
 
 2. **Install dependencies:**

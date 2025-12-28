@@ -31,7 +31,7 @@ const resources = {
       
       // Dashboard
       dashboard: {
-        welcome: 'Welcome to Rural Health Assistant',
+        welcome: 'Welcome to GramSheba AI',
         recentSymptoms: 'Recent Symptom Checks',
         recentVitals: 'Recent Vital Signs',
         quickActions: 'Quick Actions',

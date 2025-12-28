@@ -1,9 +1,3 @@
-// src/services/contentLoader.js
-/**
- * Service for loading health content from JSON files
- * Supports both src-based imports and public folder fetching
- */
-
 class ContentLoader {
   constructor() {
     this.cache = new Map();
@@ -47,12 +41,10 @@ class ContentLoader {
    */
   async loadFromSrc(language) {
     try {
-      // Import all JSON files from src/content/articles
       const modules = import.meta.glob('/src/content/articles/**/*.json', { eager: false });
       const articles = [];
 
       for (const path in modules) {
-        // Check if this file is for the requested language
         const pathMatch = path.match(/\/articles\/([^/]+)\//);
         if (pathMatch && pathMatch[1] === language) {
           const module = await modules[path]();
@@ -70,33 +62,49 @@ class ContentLoader {
   /**
    * Load articles from public folder using fetch
    * Place articles in: public/health-content/articles/en/ and public/health-content/articles/bn/
-   * Requires a manifest file listing all articles
    */
   async loadFromPublic(language) {
     try {
-      // First, load the manifest file that lists all articles
+      // 1. Load the manifest file
       if (!this.articleManifest) {
-        const manifestResponse = await fetch('/health-content/manifest.json');
+        const manifestUrl = '/health-content/manifest.json';
+        console.log(`Fetching manifest from: ${manifestUrl}`);
+        
+        const manifestResponse = await fetch(manifestUrl);
         if (!manifestResponse.ok) {
-          throw new Error('Manifest file not found. Create public/health-content/manifest.json');
+          throw new Error(`Manifest not found at ${manifestUrl}. Check your public folder structure.`);
         }
         this.articleManifest = await manifestResponse.json();
       }
 
-      // Get article filenames for this language
+      // 2. Get article filenames for this language
       const articleFiles = this.articleManifest[language] || [];
       const articles = [];
 
-      // Fetch each article
+      // 3. Fetch each article with debugging
       for (const filename of articleFiles) {
         try {
-          const response = await fetch(`/health-content/articles/${language}/${filename}`);
-          if (response.ok) {
-            const article = await response.json();
-            articles.push(article);
+          const fetchUrl = `/health-content/articles/${language}/${filename}`;
+          console.log(`Attempting to fetch article: ${fetchUrl}`);
+
+          const response = await fetch(fetchUrl);
+          
+          if (!response.ok) {
+            console.error(`Failed to reach ${fetchUrl} - Status: ${response.status}`);
+            continue; 
           }
+
+          // Checking if response is actually JSON and not an HTML error page
+          const contentType = response.headers.get("content-type");
+          if (!contentType || !contentType.includes("application/json")) {
+            console.error(`Expected JSON from ${fetchUrl} but received ${contentType}. Check if file exists.`);
+            continue;
+          }
+
+          const article = await response.json();
+          articles.push(article);
         } catch (err) {
-          console.error(`Failed to load article: ${filename}`, err);
+          console.error(`Error processing ${filename}:`, err);
         }
       }
 
@@ -108,15 +116,13 @@ class ContentLoader {
   }
 
   /**
-   * Load articles from API endpoint (for production with backend)
+   * Load articles from API endpoint
    */
   async loadFromAPI(language) {
     try {
       const response = await fetch(`/api/health-content/${language}`);
       if (!response.ok) throw new Error('API request failed');
-      
-      const articles = await response.json();
-      return articles;
+      return await response.json();
     } catch (error) {
       console.error('API loading failed:', error);
       return [];
@@ -168,9 +174,6 @@ class ContentLoader {
     );
   }
 
-  /**
-   * Calculate content size
-   */
   calculateSize(content) {
     const bytes = new Blob([content]).size;
     if (bytes < 1024) return `${bytes} B`;
@@ -178,21 +181,14 @@ class ContentLoader {
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   }
 
-  /**
-   * Truncate text
-   */
   truncate(text, maxLength = 150) {
     if (!text) return '';
-    // Remove HTML tags for summary
     const plainText = text.replace(/<[^>]*>/g, '');
     return plainText.length > maxLength 
       ? plainText.substring(0, maxLength) + '...'
       : plainText;
   }
 
-  /**
-   * Clear cache
-   */
   clearCache() {
     this.cache.clear();
     this.articleManifest = null;
