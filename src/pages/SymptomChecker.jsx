@@ -18,9 +18,11 @@ import {
   Mic as MicIcon,
   Send as SendIcon,
   Warning as WarningIcon,
-  Info as InfoIcon
+  Info as InfoIcon,
+  CameraAlt as CameraIcon
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { symptomAnalyzer } from '../ai/symptomAnalyzer';
 import { useAppStore } from '../store/useAppStore';
 import { useVoiceInput } from '../hooks/useVoiceInput';
@@ -29,6 +31,7 @@ import SymptomResults from '../components/symptom-checker/SymptomResults';
 
 const SymptomChecker = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { language, addSymptomRecord } = useAppStore();
   const [symptoms, setSymptoms] = useState('');
   const [analyzing, setAnalyzing] = useState(false);
@@ -96,6 +99,31 @@ const SymptomChecker = () => {
       <Typography variant="body1" color="text.secondary" paragraph>
         {t('symptoms.description')}
       </Typography>
+
+      {/* Visual Scanner Button */}
+      <Card sx={{ mb: 3, bgcolor: 'primary.light' }}>
+        <CardContent>
+          <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
+            <Box sx={{ flex: 1 }}>
+              <Typography variant="h6" gutterBottom>
+                {t('scanner.title')}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {t('scanner.description')}
+              </Typography>
+            </Box>
+            <Button
+              variant="contained"
+              startIcon={<CameraIcon />}
+              onClick={() => navigate('/visual-scanner')}
+              size="large"
+              sx={{ whiteSpace: 'nowrap' }}
+            >
+              {t('scanner.startScanning')}
+            </Button>
+          </Stack>
+        </CardContent>
+      </Card>
 
       {/* Input Section */}
       <Card sx={{ mb: 3 }}>

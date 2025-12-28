@@ -25,7 +25,6 @@ const Navigation = () => {
     { label: t('nav.symptomChecker'), value: '/symptom-checker', icon: <SymptomIcon /> },
     { label: t('nav.vitalsMonitor'), value: '/vitals', icon: <VitalsIcon /> },
     { label: t('nav.healthEducation'), value: '/education', icon: <EducationIcon /> },
-    { label: t('nav.visualScanner'), value: '/visual-scanner', icon: <ScannerIcon /> },
     { label: t('nav.telemedicine'), value: '/telemedicine', icon: <TelemedicineIcon /> }
   ];
 
@@ -37,18 +36,8 @@ const Navigation = () => {
         left: 0,
         right: 0,
         zIndex: 1000,
-        overflowX: 'auto',
-        overflowY: 'hidden',
         bgcolor: 'background.paper',
-        boxShadow: 3,
-        WebkitOverflowScrolling: 'touch',
-        '&::-webkit-scrollbar': {
-          height: '4px'
-        },
-        '&::-webkit-scrollbar-thumb': {
-          backgroundColor: 'rgba(0,0,0,.3)',
-          borderRadius: '4px'
-        }
+        boxShadow: 3
       }}
     >
       <BottomNavigation
@@ -58,26 +47,18 @@ const Navigation = () => {
         }}
         showLabels
         sx={{
-          minWidth: 'fit-content',
-          width: 'max-content',
-          display: 'flex',
-          flexWrap: 'nowrap',
+          width: '100%',
           '& .MuiBottomNavigationAction-root': {
-            minWidth: '70px',
-            maxWidth: '80px',
-            padding: '6px 4px',
-            flex: '0 0 auto',
+            minWidth: { xs: '64px', sm: '80px' },
+            padding: { xs: '6px 0', sm: '6px 12px' },
             '& .MuiBottomNavigationAction-label': {
-              fontSize: '0.6rem',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
+              fontSize: { xs: '0.65rem', sm: '0.75rem' },
               '&.Mui-selected': {
-                fontSize: '0.65rem'
+                fontSize: { xs: '0.7rem', sm: '0.8rem' }
               }
             },
             '& .MuiSvgIcon-root': {
-              fontSize: '1.3rem'
+              fontSize: { xs: '1.3rem', sm: '1.5rem' }
             }
           }
         }}
