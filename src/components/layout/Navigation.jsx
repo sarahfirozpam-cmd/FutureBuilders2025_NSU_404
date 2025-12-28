@@ -44,18 +44,6 @@ const Navigation = () => {
           navigate(newValue);
         }}
         showLabels
-        sx={{
-          '& .MuiBottomNavigationAction-root': {
-            minWidth: 'auto',
-            padding: '6px 0',
-            '& .MuiBottomNavigationAction-label': {
-              fontSize: '0.65rem',
-              '&.Mui-selected': {
-                fontSize: '0.7rem'
-              }
-            }
-          }
-        }}
       >
         {navigationItems.map((item) => (
           <BottomNavigationAction

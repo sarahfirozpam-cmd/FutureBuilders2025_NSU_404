@@ -79,21 +79,6 @@ class ModelLoader {
       }
     };
   }
-
-  // Clean up models from memory
-  disposeModels() {
-    Object.values(this.models).forEach(model => {
-      if (model && model.dispose) {
-        model.dispose();
-      }
-    });
-    this.models = {};
-  }
-
-  // Check if models are loaded
-  areModelsLoaded() {
-    return Object.keys(this.models).length > 0;
-  }
 }
 
 export const modelLoader = new ModelLoader();

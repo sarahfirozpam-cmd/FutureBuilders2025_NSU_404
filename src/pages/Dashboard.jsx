@@ -19,6 +19,7 @@ import {
   FavoriteOutlined as VitalsIcon,
   School as EducationIcon,
   Videocam as TelemedicineIcon,
+  Warning as WarningIcon,
   CheckCircle as CheckIcon
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -30,7 +31,7 @@ import { useAppStore } from '../store/useAppStore';
 const Dashboard = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { modelsLoaded, language } = useAppStore();
+  const { symptomsHistory, vitalsHistory, modelsLoaded } = useAppStore();
   const [recentSymptoms, setRecentSymptoms] = useState([]);
   const [recentVitals, setRecentVitals] = useState([]);
 
@@ -61,28 +62,28 @@ const Dashboard = () => {
   const quickActions = [
     {
       title: t('dashboard.checkSymptoms'),
-      description: language === 'bn' ? 'এআই-চালিত উপসর্গ বিশ্লেষণ' : 'AI-powered symptom analysis',
+      description: 'AI-powered symptom analysis',
       icon: <SymptomIcon fontSize="large" />,
       color: '#1976d2',
       path: '/symptom-checker'
     },
     {
       title: t('dashboard.recordVitals'),
-      description: language === 'bn' ? 'আপনার ভাইটাল সাইন পর্যবেক্ষণ করুন' : 'Monitor your vital signs',
+      description: 'Monitor your vital signs',
       icon: <VitalsIcon fontSize="large" />,
       color: '#d32f2f',
       path: '/vitals'
     },
     {
       title: t('dashboard.learnHealth'),
-      description: language === 'bn' ? 'স্বাস্থ্য সম্পদে অ্যাক্সেস করুন' : 'Access health resources',
+      description: 'Access health resources',
       icon: <EducationIcon fontSize="large" />,
       color: '#388e3c',
       path: '/education'
     },
     {
       title: t('dashboard.consultDoctor'),
-      description: language === 'bn' ? 'টেলিমেডিসিন পরামর্শ অনুরোধ করুন' : 'Request telemedicine consultation',
+      description: 'Request telemedicine consultation',
       icon: <TelemedicineIcon fontSize="large" />,
       color: '#f57c00',
       path: '/telemedicine'
@@ -111,7 +112,7 @@ const Dashboard = () => {
         {modelsLoaded && (
           <Chip
             icon={<CheckIcon />}
-            label={language === 'bn' ? 'এআই মডেল প্রস্তুত' : 'AI Models Ready'}
+            label="AI Models Ready"
             color="success"
             size="small"
           />
@@ -124,12 +125,12 @@ const Dashboard = () => {
       </Typography>
       <Grid container spacing={2} sx={{ mb: 4 }}>
         {quickActions.map((action, index) => (
-          <Grid item xs={6} sm={6} md={3} key={index}>
+          <Grid item xs={12} sm={6} md={3} key={index}>
             <Card 
               sx={{ 
                 height: '100%',
                 cursor: 'pointer',
-                transition: 'transform 0.2s, box-shadow 0.2s',
+                transition: 'transform 0.2s',
                 '&:hover': {
                   transform: 'translateY(-4px)',
                   boxShadow: 4
@@ -141,21 +142,17 @@ const Dashboard = () => {
                 <Avatar
                   sx={{
                     bgcolor: action.color,
-                    width: { xs: 48, sm: 56 },
-                    height: { xs: 48, sm: 56 },
+                    width: 56,
+                    height: 56,
                     mb: 2
                   }}
                 >
                   {action.icon}
                 </Avatar>
-                <Typography variant="subtitle1" gutterBottom fontWeight={600}>
+                <Typography variant="h6" gutterBottom>
                   {action.title}
                 </Typography>
-                <Typography 
-                  variant="body2" 
-                  color="text.secondary"
-                  sx={{ display: { xs: 'none', sm: 'block' } }}
-                >
+                <Typography variant="body2" color="text.secondary">
                   {action.description}
                 </Typography>
               </CardContent>
@@ -174,13 +171,9 @@ const Dashboard = () => {
                 {t('dashboard.recentSymptoms')}
               </Typography>
               {recentSymptoms.length > 0 ? (
-                <List disablePadding>
+                <List>
                   {recentSymptoms.map((symptom, index) => (
-                    <ListItem 
-                      key={index} 
-                      divider={index < recentSymptoms.length - 1}
-                      sx={{ px: 0 }}
-                    >
+                    <ListItem key={index} divider={index < recentSymptoms.length - 1}>
                       <ListItemAvatar>
                         <Avatar sx={{ bgcolor: getSeverityColor(symptom.severity) }}>
                           <SymptomIcon />
@@ -206,13 +199,13 @@ const Dashboard = () => {
                 </List>
               ) : (
                 <Typography variant="body2" color="text.secondary" sx={{ py: 2 }}>
-                  {language === 'bn' ? 'কোনো সাম্প্রতিক উপসর্গ পরীক্ষা নেই' : 'No recent symptom checks'}
+                  No recent symptom checks
                 </Typography>
               )}
             </CardContent>
             <CardActions>
               <Button size="small" onClick={() => navigate('/symptom-checker')}>
-                {t('dashboard.checkSymptoms')}
+                Check Symptoms
               </Button>
             </CardActions>
           </Card>
@@ -226,13 +219,9 @@ const Dashboard = () => {
                 {t('dashboard.recentVitals')}
               </Typography>
               {recentVitals.length > 0 ? (
-                <List disablePadding>
+                <List>
                   {recentVitals.map((vital, index) => (
-                    <ListItem 
-                      key={index} 
-                      divider={index < recentVitals.length - 1}
-                      sx={{ px: 0 }}
-                    >
+                    <ListItem key={index} divider={index < recentVitals.length - 1}>
                       <ListItemAvatar>
                         <Avatar sx={{ bgcolor: getSeverityColor(vital.riskLevel) }}>
                           <VitalsIcon />
@@ -258,13 +247,13 @@ const Dashboard = () => {
                 </List>
               ) : (
                 <Typography variant="body2" color="text.secondary" sx={{ py: 2 }}>
-                  {language === 'bn' ? 'কোনো সাম্প্রতিক ভাইটাল রেকর্ড নেই' : 'No recent vitals recorded'}
+                  No recent vitals recorded
                 </Typography>
               )}
             </CardContent>
             <CardActions>
               <Button size="small" onClick={() => navigate('/vitals')}>
-                {t('dashboard.recordVitals')}
+                Record Vitals
               </Button>
             </CardActions>
           </Card>

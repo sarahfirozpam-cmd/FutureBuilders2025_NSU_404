@@ -92,31 +92,6 @@ export class VitalsPredictor {
       });
       overallRisk = vitals.temperature >= 39.5 ? 'high' : 
                     (overallRisk === 'low' ? 'moderate' : overallRisk);
-    } else if (vitals.temperature < 36) {
-      risks.push({
-        type: 'hypothermia',
-        severity: vitals.temperature < 35 ? 'high' : 'moderate',
-        message: {
-          en: 'Low body temperature detected. Keep warm and monitor closely.',
-          bn: 'শরীরের তাপমাত্রা কম। উষ্ণ থাকুন এবং সতর্কভাবে পর্যবেক্ষণ করুন।'
-        }
-      });
-    }
-
-    // Age-specific concerns
-    if (vitals.age >= 60) {
-      if (vitals.systolic >= 130 || vitals.diastolic >= 80) {
-        if (!risks.some(r => r.type === 'hypertension')) {
-          risks.push({
-            type: 'elderly_bp_concern',
-            severity: 'moderate',
-            message: {
-              en: 'Blood pressure slightly elevated for your age. Regular monitoring recommended.',
-              bn: 'আপনার বয়সের জন্য রক্তচাপ সামান্য বেশি। নিয়মিত পর্যবেক্ষণ প্রস্তাবিত।'
-            }
-          });
-        }
-      }
     }
 
     return { risks, overallRisk };
@@ -187,34 +162,10 @@ export class VitalsPredictor {
       recommendations.bn.push('নিয়মিত ভাইটাল পর্যবেক্ষণ করুন এবং ২৪-৪৮ ঘন্টার মধ্যে ডাক্তারের পরামর্শ নিন');
     }
 
-    // Lifestyle recommendations
-    if (vitals.systolic >= 120 || vitals.diastolic >= 80) {
-      recommendations.en.push('Reduce salt intake and avoid processed foods');
-      recommendations.bn.push('লবণ এবং প্রক্রিয়াজাত খাবার কম খান');
-    }
-
-    if (vitals.pulse > 90) {
-      recommendations.en.push('Practice relaxation techniques and regular exercise');
-      recommendations.bn.push('শিথিলকরণ কৌশল এবং নিয়মিত ব্যায়াম করুন');
-    }
-
     recommendations.en.push('Maintain a healthy lifestyle with proper diet and exercise');
     recommendations.bn.push('সঠিক খাদ্য এবং ব্যায়াম সহ একটি স্বাস্থ্যকর জীবনযাপন বজায় রাখুন');
 
-    recommendations.en.push('Drink plenty of water and get adequate sleep');
-    recommendations.bn.push('পর্যাপ্ত পানি পান করুন এবং যথেষ্ট ঘুমান');
-
     return recommendations;
-  }
-
-  // Get normal ranges for UI display
-  getNormalRanges() {
-    return {
-      systolic: { min: 90, max: 120, unit: 'mmHg' },
-      diastolic: { min: 60, max: 80, unit: 'mmHg' },
-      pulse: { min: 60, max: 100, unit: 'bpm' },
-      temperature: { min: 36.1, max: 37.2, unit: '°C' }
-    };
   }
 }
 

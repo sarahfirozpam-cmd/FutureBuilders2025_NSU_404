@@ -110,7 +110,7 @@ const SymptomResults = ({ results, language }) => {
               variant="determinate"
               value={results.primaryDiagnosis.confidence}
               color={getSeverityColor(results.primaryDiagnosis.severity)}
-              sx={{ mb: 2, height: 8, borderRadius: 4 }}
+              sx={{ mb: 2 }}
             />
 
             <Divider sx={{ my: 2 }} />
@@ -128,7 +128,7 @@ const SymptomResults = ({ results, language }) => {
                 <Typography variant="subtitle2" gutterBottom>
                   Matched Symptoms:
                 </Typography>
-                <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                <Stack direction="row" spacing={1} flexWrap="wrap">
                   {results.primaryDiagnosis.matchedSymptoms.map((symptom, index) => (
                     <Chip
                       key={index}
@@ -160,7 +160,7 @@ const SymptomResults = ({ results, language }) => {
                       {getSeverityIcon(condition.severity)}
                     </ListItemIcon>
                     <ListItemText
-                      primary={condition.name[language] || condition.name.en}
+                      primary={condition.name[language]}
                       secondary={`Confidence: ${Math.round(condition.confidence * 100)}%`}
                     />
                   </ListItem>

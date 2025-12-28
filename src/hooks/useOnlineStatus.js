@@ -11,9 +11,6 @@ export const useOnlineStatus = () => {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    // Set initial status
-    setOnlineStatus(navigator.onLine);
-
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
@@ -22,5 +19,3 @@ export const useOnlineStatus = () => {
 
   return isOnline;
 };
-
-export default useOnlineStatus;

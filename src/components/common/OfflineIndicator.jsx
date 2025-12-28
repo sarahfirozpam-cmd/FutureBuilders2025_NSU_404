@@ -19,8 +19,7 @@ const OfflineIndicator = () => {
           left: 0,
           right: 0,
           zIndex: 1300,
-          borderRadius: 0,
-          justifyContent: 'center'
+          borderRadius: 0
         }}
       >
         {t('common.offline')} - Data will sync when connection is restored

@@ -23,7 +23,6 @@ import { useTranslation } from 'react-i18next';
 
 const RiskAssessment = ({ results }) => {
   const { t } = useTranslation();
-  const { language } = useTranslation().i18n;
 
   const getRiskColor = (level) => {
     switch (level) {
@@ -47,16 +46,6 @@ const RiskAssessment = ({ results }) => {
     }
   };
 
-  const getRiskLabel = (level) => {
-    const labels = {
-      high: { en: 'HIGH RISK', bn: 'উচ্চ ঝুঁকি' },
-      moderate: { en: 'MODERATE RISK', bn: 'মাঝারি ঝুঁকি' },
-      low: { en: 'LOW RISK', bn: 'কম ঝুঁকি' }
-    };
-    const lang = language === 'bn' ? 'bn' : 'en';
-    return labels[level]?.[lang] || level.toUpperCase();
-  };
-
   return (
     <Card>
       <CardContent>
@@ -71,7 +60,7 @@ const RiskAssessment = ({ results }) => {
               {t('vitals.riskLevel')}: 
             </Typography>
             <Chip
-              label={getRiskLabel(results.riskLevel)}
+              label={results.riskLevel.toUpperCase()}
               color={getRiskColor(results.riskLevel)}
               size="medium"
             />
@@ -84,7 +73,7 @@ const RiskAssessment = ({ results }) => {
             variant="determinate"
             value={results.riskScore}
             color={getRiskColor(results.riskLevel)}
-            sx={{ height: 10, borderRadius: 5 }}
+            sx={{ height: 8, borderRadius: 4 }}
           />
         </Box>
 
@@ -92,31 +81,20 @@ const RiskAssessment = ({ results }) => {
         {results.detectedRisks && results.detectedRisks.length > 0 && (
           <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle2" gutterBottom>
-              {language === 'bn' ? 'সনাক্ত সমস্যা:' : 'Detected Issues:'}
+              Detected Issues:
             </Typography>
             {results.detectedRisks.map((risk, index) => (
               <Alert
                 key={index}
-                severity={risk.severity === 'critical' || risk.severity === 'high' ? 'error' : 'warning'}
+                severity={risk.severity === 'critical' ? 'error' : 'warning'}
                 sx={{ mb: 1 }}
               >
                 <Typography variant="body2">
-                  <strong>{risk.type}:</strong>{' '}
-                  {risk.message[language === 'bn' ? 'bn' : 'en'] || risk.message.en}
+                  <strong>{risk.type}:</strong> {risk.message.en || risk.message}
                 </Typography>
               </Alert>
             ))}
           </Box>
-        )}
-
-        {/* No risks detected */}
-        {(!results.detectedRisks || results.detectedRisks.length === 0) && (
-          <Alert severity="success" sx={{ mb: 3 }}>
-            {language === 'bn' 
-              ? 'আপনার ভাইটাল সাইন স্বাভাবিক সীমার মধ্যে রয়েছে।'
-              : 'Your vital signs are within normal range.'
-            }
-          </Alert>
         )}
 
         {/* Recommendations */}
@@ -126,7 +104,7 @@ const RiskAssessment = ({ results }) => {
               {t('vitals.recommendations')}:
             </Typography>
             <List dense>
-              {(results.recommendations[language === 'bn' ? 'bn' : 'en'] || results.recommendations.en || []).map((rec, index) => (
+              {(results.recommendations.en || results.recommendations).map((rec, index) => (
                 <ListItem key={index}>
                   <ListItemIcon>
                     <HeartIcon color="primary" fontSize="small" />

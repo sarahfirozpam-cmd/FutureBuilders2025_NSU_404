@@ -14,9 +14,7 @@ const Layout = ({ children }) => {
         sx={{ 
           flex: 1, 
           py: 3,
-          mt: 8, // Account for AppBar height
-          mb: 8, // Account for bottom navigation
-          px: { xs: 2, sm: 3 }
+          mt: 8 // Account for AppBar height
         }}
       >
         {children}

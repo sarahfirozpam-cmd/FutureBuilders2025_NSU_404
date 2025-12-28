@@ -8,10 +8,10 @@ const resources = {
       // Navigation
       nav: {
         dashboard: 'Dashboard',
-        symptomChecker: 'Symptoms',
-        vitalsMonitor: 'Vitals',
-        healthEducation: 'Education',
-        telemedicine: 'Consult'
+        symptomChecker: 'Symptom Checker',
+        vitalsMonitor: 'Vitals Monitor',
+        healthEducation: 'Health Education',
+        telemedicine: 'Telemedicine'
       },
       
       // Common
@@ -87,7 +87,16 @@ const resources = {
         categories: 'Categories',
         search: 'Search content...',
         downloadedContent: 'Downloaded Content',
-        download: 'Download for Offline'
+        download: 'Download for Offline',
+        categories: {
+          general: 'General Health',
+          maternal: 'Maternal Health',
+          child: 'Child Health',
+          infectious: 'Infectious Diseases',
+          chronic: 'Chronic Conditions',
+          nutrition: 'Nutrition',
+          hygiene: 'Hygiene & Sanitation'
+        }
       },
       
       // Telemedicine
@@ -118,10 +127,10 @@ const resources = {
       // Navigation
       nav: {
         dashboard: 'ড্যাশবোর্ড',
-        symptomChecker: 'উপসর্গ',
-        vitalsMonitor: 'ভাইটাল',
-        healthEducation: 'শিক্ষা',
-        telemedicine: 'পরামর্শ'
+        symptomChecker: 'উপসর্গ পরীক্ষক',
+        vitalsMonitor: 'ভাইটাল মনিটর',
+        healthEducation: 'স্বাস্থ্য শিক্ষা',
+        telemedicine: 'টেলিমেডিসিন'
       },
       
       // Common
@@ -144,10 +153,10 @@ const resources = {
         recentSymptoms: 'সাম্প্রতিক উপসর্গ পরীক্ষা',
         recentVitals: 'সাম্প্রতিক ভাইটাল সাইন',
         quickActions: 'দ্রুত কর্ম',
-        checkSymptoms: 'উপসর্গ পরীক্ষা',
-        recordVitals: 'ভাইটাল রেকর্ড',
-        learnHealth: 'স্বাস্থ্য শিক্ষা',
-        consultDoctor: 'ডাক্তার পরামর্শ'
+        checkSymptoms: 'উপসর্গ পরীক্ষা করুন',
+        recordVitals: 'ভাইটাল রেকর্ড করুন',
+        learnHealth: 'স্বাস্থ্য সম্পর্কে জানুন',
+        consultDoctor: 'ডাক্তারের পরামর্শ নিন'
       },
       
       // Symptom Checker
@@ -179,7 +188,7 @@ const resources = {
         temperature: 'তাপমাত্রা',
         weight: 'ওজন (ঐচ্ছিক)',
         age: 'বয়স',
-        submit: 'ভাইটাল বিশ্লেষণ',
+        submit: 'ভাইটাল বিশ্লেষণ করুন',
         riskAssessment: 'ঝুঁকি মূল্যায়ন',
         riskLevel: 'ঝুঁকির মাত্রা',
         recommendations: 'সুপারিশ',
@@ -197,13 +206,22 @@ const resources = {
         categories: 'বিভাগসমূহ',
         search: 'কন্টেন্ট অনুসন্ধান করুন...',
         downloadedContent: 'ডাউনলোড করা কন্টেন্ট',
-        download: 'অফলাইনে ডাউনলোড করুন'
+        download: 'অফলাইনের জন্য ডাউনলোড করুন',
+        categories: {
+          general: 'সাধারণ স্বাস্থ্য',
+          maternal: 'মাতৃ স্বাস্থ্য',
+          child: 'শিশু স্বাস্থ্য',
+          infectious: 'সংক্রামক রোগ',
+          chronic: 'দীর্ঘস্থায়ী অবস্থা',
+          nutrition: 'পুষ্টি',
+          hygiene: 'স্বাস্থ্যবিধি ও স্যানিটেশন'
+        }
       },
       
       // Telemedicine
       telemedicine: {
         title: 'টেলিমেডিসিন',
-        requestConsultation: 'পরামর্শের অনুরোধ',
+        requestConsultation: 'পরামর্শের অনুরোধ করুন',
         queuedRequests: 'সারিবদ্ধ অনুরোধ',
         description: 'আপনার উদ্বেগ বর্ণনা করুন',
         priority: 'অগ্রাধিকার',

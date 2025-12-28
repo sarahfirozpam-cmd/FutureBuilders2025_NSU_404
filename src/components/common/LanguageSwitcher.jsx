@@ -1,17 +1,17 @@
 import React from 'react';
-import { IconButton, Menu, MenuItem, ListItemText, ListItemIcon } from '@mui/material';
-import { Language as LanguageIcon, Check as CheckIcon } from '@mui/icons-material';
+import { IconButton, Menu, MenuItem, ListItemText } from '@mui/material';
+import { Language as LanguageIcon } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../../store/useAppStore';
 
 const LanguageSwitcher = () => {
   const { i18n } = useTranslation();
-  const { setLanguage, language } = useAppStore();
+  const { setLanguage } = useAppStore();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const languages = [
-    { code: 'en', name: 'English', nativeName: 'English' },
-    { code: 'bn', name: 'Bengali', nativeName: 'বাংলা' }
+    { code: 'en', name: 'English' },
+    { code: 'bn', name: 'বাংলা' }
   ];
 
   const handleClick = (event) => {
@@ -30,44 +30,21 @@ const LanguageSwitcher = () => {
 
   return (
     <>
-      <IconButton 
-        color="inherit" 
-        onClick={handleClick}
-        aria-label="Change language"
-      >
+      <IconButton color="inherit" onClick={handleClick}>
         <LanguageIcon />
       </IconButton>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
       >
         {languages.map((lang) => (
           <MenuItem
             key={lang.code}
             onClick={() => handleLanguageChange(lang.code)}
-            selected={i18n.language === lang.code || language === lang.code}
+            selected={i18n.language === lang.code}
           >
-            {(i18n.language === lang.code || language === lang.code) && (
-              <ListItemIcon>
-                <CheckIcon fontSize="small" />
-              </ListItemIcon>
-            )}
-            <ListItemText 
-              primary={lang.nativeName}
-              secondary={lang.name}
-              sx={{ 
-                ml: (i18n.language === lang.code || language === lang.code) ? 0 : 4 
-              }}
-            />
+            <ListItemText>{lang.name}</ListItemText>
           </MenuItem>
         ))}
       </Menu>

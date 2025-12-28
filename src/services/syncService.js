@@ -8,8 +8,6 @@ class SyncService {
   constructor() {
     this.isSyncing = false;
     this.syncQueue = [];
-    this.retryAttempts = 3;
-    this.retryDelay = 1000;
   }
 
   // Sync queued consultations when online
@@ -48,74 +46,6 @@ class SyncService {
       }
     } finally {
       this.isSyncing = false;
-    }
-  }
-
-  // Sync unsynced symptoms
-  async syncSymptoms() {
-    const { isOnline } = useAppStore.getState();
-    if (!isOnline) return;
-
-    try {
-      const unsyncedSymptoms = await db.symptoms
-        .where('synced')
-        .equals(false)
-        .toArray();
-
-      for (const symptom of unsyncedSymptoms) {
-        try {
-          const response = await axios.post(
-            `${API_BASE_URL}/symptoms`,
-            symptom,
-            { timeout: 10000 }
-          );
-
-          if (response.data.success) {
-            await db.symptoms.update(symptom.id, {
-              synced: true,
-              serverId: response.data.id
-            });
-          }
-        } catch (error) {
-          console.error('Failed to sync symptom:', symptom.id, error);
-        }
-      }
-    } catch (error) {
-      console.error('Symptom sync error:', error);
-    }
-  }
-
-  // Sync unsynced vitals
-  async syncVitals() {
-    const { isOnline } = useAppStore.getState();
-    if (!isOnline) return;
-
-    try {
-      const unsyncedVitals = await db.vitals
-        .where('synced')
-        .equals(false)
-        .toArray();
-
-      for (const vital of unsyncedVitals) {
-        try {
-          const response = await axios.post(
-            `${API_BASE_URL}/vitals`,
-            vital,
-            { timeout: 10000 }
-          );
-
-          if (response.data.success) {
-            await db.vitals.update(vital.id, {
-              synced: true,
-              serverId: response.data.id
-            });
-          }
-        } catch (error) {
-          console.error('Failed to sync vital:', vital.id, error);
-        }
-      }
-    } catch (error) {
-      console.error('Vitals sync error:', error);
     }
   }
 
@@ -158,7 +88,7 @@ class SyncService {
   }
 
   // Save vitals to server
-  async syncVitalsRecord(vitals) {
+  async syncVitals(vitals) {
     const { isOnline } = useAppStore.getState();
     
     if (!isOnline) {
@@ -193,52 +123,14 @@ class SyncService {
     }
   }
 
-  // Full sync all pending data
-  async syncAll() {
-    const { isOnline } = useAppStore.getState();
-    if (!isOnline || this.isSyncing) return;
-
-    console.log('Starting full sync...');
-    this.isSyncing = true;
-
-    try {
-      await Promise.all([
-        this.syncConsultations(),
-        this.syncSymptoms(),
-        this.syncVitals()
-      ]);
-      console.log('Full sync completed');
-    } catch (error) {
-      console.error('Full sync error:', error);
-    } finally {
-      this.isSyncing = false;
-    }
-  }
-
   // Auto-sync when connection is restored
   startAutoSync() {
     window.addEventListener('online', () => {
       console.log('Connection restored. Starting auto-sync...');
       setTimeout(() => {
-        this.syncAll();
+        this.syncConsultations();
       }, 2000);
     });
-
-    // Periodic sync check
-    setInterval(() => {
-      const { isOnline } = useAppStore.getState();
-      if (isOnline) {
-        this.syncAll();
-      }
-    }, 5 * 60 * 1000); // Every 5 minutes
-  }
-
-  // Get sync status
-  getSyncStatus() {
-    return {
-      isSyncing: this.isSyncing,
-      queueLength: this.syncQueue.length
-    };
   }
 }
 

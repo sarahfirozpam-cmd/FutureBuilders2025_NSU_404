@@ -11,8 +11,7 @@ import {
   Chip,
   TextField,
   InputAdornment,
-  Stack,
-  Alert
+  Stack
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -29,7 +28,6 @@ const HealthEducation = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [content, setContent] = useState([]);
-  const [downloading, setDownloading] = useState(null);
 
   const categories = [
     { id: 'all', name: { en: 'All', bn: 'সব' } },
@@ -49,9 +47,10 @@ const HealthEducation = () => {
       category: 'infectious',
       title: { en: 'Understanding Dengue Fever', bn: 'ডেঙ্গু জ্বর বোঝা' },
       description: {
-        en: 'Learn about dengue symptoms, prevention, and treatment. Dengue is a mosquito-borne viral disease that is common in tropical regions.',
-        bn: 'ডেঙ্গুর উপসর্গ, প্রতিরোধ এবং চিকিৎসা সম্পর্কে জানুন। ডেঙ্গু একটি মশাবাহিত ভাইরাল রোগ যা গ্রীষ্মমণ্ডলীয় অঞ্চলে সাধারণ।'
+        en: 'Learn about dengue symptoms, prevention, and treatment',
+        bn: 'ডেঙ্গুর উপসর্গ, প্রতিরোধ এবং চিকিৎসা সম্পর্কে জানুন'
       },
+      image: '/content/dengue.jpg',
       size: '2.5 MB'
     },
     {
@@ -59,9 +58,10 @@ const HealthEducation = () => {
       category: 'maternal',
       title: { en: 'Prenatal Care Essentials', bn: 'প্রসবপূর্ব যত্নের প্রয়োজনীয়তা' },
       description: {
-        en: 'Important steps for a healthy pregnancy including nutrition, exercise, and regular checkups.',
-        bn: 'পুষ্টি, ব্যায়াম এবং নিয়মিত চেকআপ সহ একটি স্বাস্থ্যকর গর্ভাবস্থার জন্য গুরুত্বপূর্ণ পদক্ষেপ।'
+        en: 'Important steps for a healthy pregnancy',
+        bn: 'একটি স্বাস্থ্যকর গর্ভাবস্থার জন্য গুরুত্বপূর্ণ পদক্ষেপ'
       },
+      image: '/content/prenatal.jpg',
       size: '3.1 MB'
     },
     {
@@ -69,9 +69,10 @@ const HealthEducation = () => {
       category: 'child',
       title: { en: 'Child Vaccination Schedule', bn: 'শিশু টিকাকরণ তালিকা' },
       description: {
-        en: 'Complete vaccination guide for children from birth to 5 years following Bangladesh EPI schedule.',
-        bn: 'বাংলাদেশ ইপিআই সময়সূচী অনুসরণ করে জন্ম থেকে ৫ বছর পর্যন্ত শিশুদের জন্য সম্পূর্ণ টিকাকরণ নির্দেশিকা।'
+        en: 'Complete vaccination guide for children',
+        bn: 'শিশুদের জন্য সম্পূর্ণ টিকাকরণ নির্দেশিকা'
       },
+      image: '/content/vaccination.jpg',
       size: '1.8 MB'
     },
     {
@@ -79,9 +80,10 @@ const HealthEducation = () => {
       category: 'chronic',
       title: { en: 'Managing Diabetes', bn: 'ডায়াবেটিস পরিচালনা' },
       description: {
-        en: 'Tips for controlling blood sugar levels through diet, exercise, and medication management.',
-        bn: 'খাদ্য, ব্যায়াম এবং ওষুধ ব্যবস্থাপনার মাধ্যমে রক্তে শর্করার মাত্রা নিয়ন্ত্রণের টিপস।'
+        en: 'Tips for controlling blood sugar levels',
+        bn: 'রক্তে শর্করার মাত্রা নিয়ন্ত্রণের টিপস'
       },
+      image: '/content/diabetes.jpg',
       size: '2.2 MB'
     },
     {
@@ -89,9 +91,10 @@ const HealthEducation = () => {
       category: 'nutrition',
       title: { en: 'Balanced Diet Guide', bn: 'সুষম খাদ্য নির্দেশিকা' },
       description: {
-        en: 'Learn about nutritious eating habits with locally available foods in Bangladesh.',
-        bn: 'বাংলাদেশে স্থানীয়ভাবে পাওয়া যায় এমন খাবার দিয়ে পুষ্টিকর খাদ্যাভ্যাস সম্পর্কে জানুন।'
+        en: 'Learn about nutritious eating habits',
+        bn: 'পুষ্টিকর খাদ্যাভ্যাস সম্পর্কে জানুন'
       },
+      image: '/content/nutrition.jpg',
       size: '2.8 MB'
     },
     {
@@ -99,9 +102,10 @@ const HealthEducation = () => {
       category: 'hygiene',
       title: { en: 'Hand Washing Techniques', bn: 'হাত ধোয়ার কৌশল' },
       description: {
-        en: 'Proper hand hygiene to prevent infections - when and how to wash hands correctly.',
-        bn: 'সংক্রমণ প্রতিরোধে সঠিক হাত স্বাস্থ্যবিধি - কখন এবং কীভাবে সঠিকভাবে হাত ধুতে হবে।'
+        en: 'Proper hand hygiene to prevent infections',
+        bn: 'সংক্রমণ প্রতিরোধে সঠিক হাত স্বাস্থ্যবিধি'
       },
+      image: '/content/handwashing.jpg',
       size: '1.2 MB'
     },
     {
@@ -109,9 +113,10 @@ const HealthEducation = () => {
       category: 'general',
       title: { en: 'Common Cold vs Flu', bn: 'সাধারণ সর্দি বনাম ফ্লু' },
       description: {
-        en: 'Understanding the differences between common cold and influenza, and treatment options.',
-        bn: 'সাধারণ সর্দি এবং ইনফ্লুয়েঞ্জার মধ্যে পার্থক্য এবং চিকিৎসার বিকল্পগুলি বোঝা।'
+        en: 'Differences and treatment options',
+        bn: 'পার্থক্য এবং চিকিৎসার বিকল্প'
       },
+      image: '/content/cold-flu.jpg',
       size: '1.9 MB'
     },
     {
@@ -119,30 +124,11 @@ const HealthEducation = () => {
       category: 'chronic',
       title: { en: 'Hypertension Management', bn: 'উচ্চ রক্তচাপ ব্যবস্থাপনা' },
       description: {
-        en: 'Control high blood pressure naturally through lifestyle changes and regular monitoring.',
-        bn: 'জীবনধারা পরিবর্তন এবং নিয়মিত পর্যবেক্ষণের মাধ্যমে প্রাকৃতিকভাবে উচ্চ রক্তচাপ নিয়ন্ত্রণ করুন।'
+        en: 'Control high blood pressure naturally',
+        bn: 'প্রাকৃতিকভাবে উচ্চ রক্তচাপ নিয়ন্ত্রণ করুন'
       },
+      image: '/content/hypertension.jpg',
       size: '2.4 MB'
-    },
-    {
-      id: 9,
-      category: 'infectious',
-      title: { en: 'Cholera Prevention', bn: 'কলেরা প্রতিরোধ' },
-      description: {
-        en: 'How to prevent cholera through safe water, sanitation, and ORS treatment.',
-        bn: 'নিরাপদ পানি, স্যানিটেশন এবং ওআরএস চিকিৎসার মাধ্যমে কীভাবে কলেরা প্রতিরোধ করবেন।'
-      },
-      size: '1.5 MB'
-    },
-    {
-      id: 10,
-      category: 'maternal',
-      title: { en: 'Breastfeeding Guide', bn: 'বুকের দুধ খাওয়ানোর নির্দেশিকা' },
-      description: {
-        en: 'Complete guide to breastfeeding - benefits, techniques, and common issues.',
-        bn: 'বুকের দুধ খাওয়ানোর সম্পূর্ণ নির্দেশিকা - সুবিধা, কৌশল এবং সাধারণ সমস্যা।'
-      },
-      size: '2.0 MB'
     }
   ];
 
@@ -159,8 +145,8 @@ const HealthEducation = () => {
 
     if (searchQuery) {
       filtered = filtered.filter(item =>
-        item.title[language]?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.description[language]?.toLowerCase().includes(searchQuery.toLowerCase())
+        item.title[language].toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.description[language].toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
@@ -168,10 +154,9 @@ const HealthEducation = () => {
   };
 
   const handleDownload = async (item) => {
-    setDownloading(item.id);
     try {
       // Simulate download
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Save to IndexedDB
       await db.healthContent.add({
@@ -181,10 +166,11 @@ const HealthEducation = () => {
       });
 
       addDownloadedContent(item);
+
+      alert(`${item.title[language]} downloaded successfully!`);
     } catch (error) {
       console.error('Download error:', error);
-    } finally {
-      setDownloading(null);
+      alert('Failed to download content');
     }
   };
 
@@ -216,15 +202,11 @@ const HealthEducation = () => {
       />
 
       {/* Category Filters */}
-      <Stack 
-        direction="row" 
-        spacing={1} 
-        sx={{ mb: 3, flexWrap: 'wrap', gap: 1 }}
-      >
+      <Stack direction="row" spacing={1} sx={{ mb: 3, flexWrap: 'wrap', gap: 1 }}>
         {categories.map((category) => (
           <Chip
             key={category.id}
-            label={category.name[language] || category.name.en}
+            label={category.name[language]}
             onClick={() => setSelectedCategory(category.id)}
             color={selectedCategory === category.id ? 'primary' : 'default'}
             variant={selectedCategory === category.id ? 'filled' : 'outlined'}
@@ -233,89 +215,71 @@ const HealthEducation = () => {
       </Stack>
 
       {/* Content Grid */}
-      {content.length > 0 ? (
-        <Grid container spacing={3}>
-          {content.map((item) => (
-            <Grid item xs={12} sm={6} md={4} key={item.id}>
-              <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <CardMedia
-                  component="div"
-                  sx={{
-                    height: 120,
-                    bgcolor: 'primary.light',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <Typography variant="h3" color="white" sx={{ opacity: 0.8 }}>
-                    {(item.title[language] || item.title.en).substring(0, 2).toUpperCase()}
-                  </Typography>
-                </CardMedia>
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography variant="h6" gutterBottom>
-                    {item.title[language] || item.title.en}
-                  </Typography>
-                  <Typography 
-                    variant="body2" 
-                    color="text.secondary" 
-                    sx={{
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: 'vertical',
-                      mb: 2
-                    }}
+      <Grid container spacing={3}>
+        {content.map((item) => (
+          <Grid item xs={12} sm={6} md={4} key={item.id}>
+            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <CardMedia
+                component="div"
+                sx={{
+                  height: 140,
+                  bgcolor: 'primary.light',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <Typography variant="h6" color="white">
+                  {item.title[language].substring(0, 2).toUpperCase()}
+                </Typography>
+              </CardMedia>
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Typography variant="h6" gutterBottom>
+                  {item.title[language]}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" paragraph>
+                  {item.description[language]}
+                </Typography>
+                <Stack direction="row" spacing={1}>
+                  <Chip
+                    label={categories.find(c => c.id === item.category)?.name[language]}
+                    size="small"
+                    variant="outlined"
+                  />
+                  <Chip label={item.size} size="small" variant="outlined" />
+                </Stack>
+              </CardContent>
+              <CardActions>
+                {isDownloaded(item.id) ? (
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    startIcon={<CheckIcon />}
+                    color="success"
+                    disabled
                   >
-                    {item.description[language] || item.description.en}
-                  </Typography>
-                  <Stack direction="row" spacing={1} flexWrap="wrap">
-                    <Chip
-                      label={categories.find(c => c.id === item.category)?.name[language] || item.category}
-                      size="small"
-                      variant="outlined"
-                    />
-                    <Chip label={item.size} size="small" variant="outlined" />
-                  </Stack>
-                </CardContent>
-                <CardActions>
-                  {isDownloaded(item.id) ? (
-                    <Button
-                      fullWidth
-                      variant="outlined"
-                      startIcon={<CheckIcon />}
-                      color="success"
-                      disabled
-                    >
-                      {language === 'bn' ? 'ডাউনলোড হয়েছে' : 'Downloaded'}
-                    </Button>
-                  ) : (
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      startIcon={<DownloadIcon />}
-                      onClick={() => handleDownload(item)}
-                      disabled={downloading === item.id}
-                    >
-                      {downloading === item.id 
-                        ? (language === 'bn' ? 'ডাউনলোড হচ্ছে...' : 'Downloading...') 
-                        : t('education.download')
-                      }
-                    </Button>
-                  )}
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      ) : (
+                    Downloaded
+                  </Button>
+                ) : (
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    startIcon={<DownloadIcon />}
+                    onClick={() => handleDownload(item)}
+                  >
+                    {t('education.download')}
+                  </Button>
+                )}
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+
+      {content.length === 0 && (
         <Box sx={{ textAlign: 'center', py: 8 }}>
           <Typography variant="body1" color="text.secondary">
-            {language === 'bn' 
-              ? 'আপনার অনুসন্ধানের সাথে মিলে এমন কোনো কন্টেন্ট পাওয়া যায়নি'
-              : 'No content found matching your search'
-            }
+            No content found matching your search
           </Typography>
         </Box>
       )}

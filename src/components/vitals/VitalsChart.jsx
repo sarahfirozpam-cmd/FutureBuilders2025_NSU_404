@@ -10,17 +10,14 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import { format } from 'date-fns';
-import { Box, useTheme, useMediaQuery } from '@mui/material';
+import { Box } from '@mui/material';
 
 const VitalsChart = ({ data }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
   const chartData = data
     .slice()
     .reverse()
     .map((item) => ({
-      date: format(new Date(item.createdAt), isMobile ? 'dd/MM' : 'MMM dd'),
+      date: format(new Date(item.createdAt), 'MMM dd'),
       systolic: item.systolic,
       diastolic: item.diastolic,
       pulse: item.pulse,
@@ -28,43 +25,20 @@ const VitalsChart = ({ data }) => {
     }));
 
   return (
-    <Box sx={{ width: '100%', height: { xs: 300, sm: 400 } }}>
+    <Box sx={{ width: '100%', height: 400 }}>
       <ResponsiveContainer>
-        <LineChart 
-          data={chartData}
-          margin={{ 
-            top: 5, 
-            right: isMobile ? 10 : 30, 
-            left: isMobile ? 0 : 20, 
-            bottom: 5 
-          }}
-        >
+        <LineChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis 
-            dataKey="date" 
-            tick={{ fontSize: isMobile ? 10 : 12 }}
-          />
-          <YAxis 
-            tick={{ fontSize: isMobile ? 10 : 12 }}
-            width={isMobile ? 30 : 40}
-          />
-          <Tooltip 
-            contentStyle={{
-              backgroundColor: theme.palette.background.paper,
-              border: `1px solid ${theme.palette.divider}`
-            }}
-          />
-          <Legend 
-            wrapperStyle={{ fontSize: isMobile ? 10 : 12 }}
-          />
+          <XAxis dataKey="date" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
           <Line
             type="monotone"
             dataKey="systolic"
             stroke="#d32f2f"
             name="Systolic BP"
             strokeWidth={2}
-            dot={{ r: isMobile ? 3 : 4 }}
-            activeDot={{ r: isMobile ? 5 : 6 }}
           />
           <Line
             type="monotone"
@@ -72,8 +46,6 @@ const VitalsChart = ({ data }) => {
             stroke="#f57c00"
             name="Diastolic BP"
             strokeWidth={2}
-            dot={{ r: isMobile ? 3 : 4 }}
-            activeDot={{ r: isMobile ? 5 : 6 }}
           />
           <Line
             type="monotone"
@@ -81,8 +53,6 @@ const VitalsChart = ({ data }) => {
             stroke="#1976d2"
             name="Pulse"
             strokeWidth={2}
-            dot={{ r: isMobile ? 3 : 4 }}
-            activeDot={{ r: isMobile ? 5 : 6 }}
           />
         </LineChart>
       </ResponsiveContainer>
