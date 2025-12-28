@@ -1,0 +1,13 @@
+{
+  "format": "layers-model",
+  "generatedBy": "TensorFlow.js",
+  "convertedBy": "TensorFlow.js Converter",
+  "modelTopology": {
+    "class_name": "Sequential",
+    "config": {
+      "name": "vitals_predictor",
+      "layers": []
+    }
+  },
+  "weightsManifest": []
+}
