@@ -62,21 +62,6 @@ const CameraCapture = ({
     );
   }
 
-  if (!isActive && hasPermission === null) {
-    return (
-      <Card>
-        <CardContent>
-          <Stack spacing={2} alignItems="center" sx={{ py: 4 }}>
-            <CircularProgress />
-            <Typography variant="body2" color="text.secondary">
-              {t('scanner.initializingCamera')}
-            </Typography>
-          </Stack>
-        </CardContent>
-      </Card>
-    );
-  }
-
   return (
     <Box>
       {error && (
@@ -86,6 +71,30 @@ const CameraCapture = ({
       )}
 
       <Card sx={{ position: 'relative', bgcolor: 'black' }}>
+        {!isActive && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 1,
+              bgcolor: 'rgba(0, 0, 0, 0.8)'
+            }}
+          >
+            <Stack spacing={2} alignItems="center">
+              <CircularProgress sx={{ color: 'white' }} />
+              <Typography variant="body2" sx={{ color: 'white' }}>
+                {t('scanner.initializingCamera')}
+              </Typography>
+            </Stack>
+          </Box>
+        )}
+        
         <video
           ref={videoRef}
           autoPlay
@@ -95,7 +104,8 @@ const CameraCapture = ({
             width: '100%',
             maxHeight: '70vh',
             objectFit: 'contain',
-            display: 'block'
+            display: 'block',
+            minHeight: '400px'
           }}
         />
 
